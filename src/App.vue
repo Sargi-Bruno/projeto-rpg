@@ -1,119 +1,88 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from '@/components/HelloWorld.vue'
+// import { ref } from 'vue'
+
+// const selectedCars = ref(null)
+// const cars = ref([
+//   {brand: 'Audi', value: 'Audi'},
+//   {brand: 'BMW', value: 'BMW'},
+//   {brand: 'Fiat', value: 'Fiat'},
+//   {brand: 'Honda', value: 'Honda'},
+//   {brand: 'Jaguar', value: 'Jaguar'},
+//   {brand: 'Mercedes', value: 'Mercedes'},
+//   {brand: 'Renault', value: 'Renault'},
+//   {brand: 'Volkswagen', value: 'Volkswagen'},
+//   {brand: 'Volvo', value: 'Volvo'}
+// ])
 </script>
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
     <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
       <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+        <h1 class="title">Projeto RPG</h1>
+        <RouterLink :to="{ name: 'home' }">Início</RouterLink>
+        <RouterLink :to="{ name: 'criar-raça' }">Raças</RouterLink>
+        <RouterLink :to="{ name: 'criar-classe' }">Classes</RouterLink>
+        <RouterLink :to="{ name: 'criar-origem' }">Origens</RouterLink>
+        <RouterLink :to="{ name: 'criar-deus' }">Deuses</RouterLink>
+        <RouterLink :to="{ name: 'criar-poder-geral' }">Poderes Gerais</RouterLink>
+        <RouterLink :to="{ name: 'criar-equipamento' }">Equipamentos</RouterLink>
+        <RouterLink :to="{ name: 'criar-magia' }">Magias</RouterLink>
       </nav>
     </div>
+    <!-- <p-button label="Botão"></p-button>
+    <p-input-number />
+    <p-multi-select v-model="selectedCars" :options="cars" optionLabel="brand" placeholder="Select Brands" />
+    <p-editor editorStyle="height: 320px">
+      <template #toolbar>
+        <span class="ql-formats">
+          <button class="ql-bold"></button>
+          <button class="ql-italic"></button>
+          <button class="ql-underline"></button>
+        </span>
+        <span class="ql-formats">
+          <button class="ql-list" value="ordered"></button>
+          <button class="ql-list" value="bullet"></button>
+        </span>
+        <span class="ql-formats">
+          <button class="ql-link"></button>
+          <button class="ql-clean"></button>
+        </span>
+      </template>
+    </p-editor> -->
   </header>
 
   <RouterView />
 </template>
 
 <style>
-@import '@/assets/base.css';
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+@import 'primevue/resources/primevue.min.css ';
+@import 'primeicons/primeicons.css';
+/* @import './assets/theme.css'; */
+/* @import 'primevue/resources/themes/lara-light-indigo/theme.css'; */
+
+@font-face {
+  font-family: 'Tormenta';
+  src: url('./assets/fonts/Tormenta.ttf') format('truetype');
+}
+
+*, *::after, *::before {
+  box-sizing: border-box;
+  
+}
+
+body {
+  margin: 0;
+}
 
 #app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-
-  font-weight: normal;
+  font-family: 'Roboto', sans-serif;
 }
 
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-}
-
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
-
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
-
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+.title {
+  font-family: 'Tormenta', sans-serif;
 }
 </style>
