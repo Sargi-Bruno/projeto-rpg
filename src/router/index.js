@@ -10,8 +10,8 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/criar-raça',
-      name: 'criar-raça',
+      path: '/criar-raca',
+      name: 'criar-raca',
       component: () => import('../views/racas-views/CreateRacasView.vue')
     },
     {

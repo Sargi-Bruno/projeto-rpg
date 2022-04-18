@@ -22,7 +22,7 @@ import { RouterLink, RouterView } from 'vue-router'
       <nav>
         <h1 class="title">Projeto RPG</h1>
         <RouterLink :to="{ name: 'home' }">Início</RouterLink>
-        <RouterLink :to="{ name: 'criar-raça' }">Raças</RouterLink>
+        <RouterLink :to="{ name: 'criar-raca' }">Raças</RouterLink>
         <RouterLink :to="{ name: 'criar-classe' }">Classes</RouterLink>
         <RouterLink :to="{ name: 'criar-origem' }">Origens</RouterLink>
         <RouterLink :to="{ name: 'criar-deus' }">Deuses</RouterLink>
