@@ -84,9 +84,10 @@ const origem = ref({
     </p-editor>
   </div>
   <div>
-    <label for="poder-unico">Poder Único</label>
+    <h4>Poder Único</h4>
+    <label for="poder-unico-nome">Nome</label>
     <p-input-text 
-      id="poder-unico"
+      id="poder-unico-nome"
       v-model="origem.poderUnico.nome"
     />
     <label>Descrição</label>
@@ -111,5 +112,5 @@ const origem = ref({
   </div>
   <p-button 
       label="Finalizar"
-    />
+  />
 </template>
