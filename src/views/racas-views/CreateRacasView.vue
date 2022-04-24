@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import AdicionarHabilidade from '../../components/AdicionarHabilidade.vue'
 
 const atributosDicionario = {
   forca: 'Força',
@@ -44,6 +45,7 @@ const excecaoAtributoField = ref('')
 const excecaoAtributo = ref()
 const raca = ref({
   nome: '',
+  descricao: '',
   tipoAtributos: '', //fixo, variante ou dinamico
   habilidades: [],
   tamanho: 'Médio',
@@ -56,19 +58,13 @@ const exibirAtributosFixo = ref()
 const exibirAtributosVariante = ref([])
 const varianteNome = ref('')
 const variantesNomeLista = ref([])
-const habilidade = ref({
-  nome: '',
-  descricao: ''
-})
 
-const adicionarHabilidade = () => {
+const adicionarHabilidade = (habilidade) => {
   raca.value.habilidades.push({
-    nome: habilidade.value.nome,
-    descricao: habilidade.value.descricao
+    nome: habilidade.nome,
+    habilidadeMagica: habilidade.habilidadeMagica,
+    descricao: habilidade.descricao
   })
-
-  habilidade.value.nome = ''
-  habilidade.value.descricao = ''
 }
 
 const adicionarAtributosDinamico = () => {
@@ -142,6 +138,10 @@ const removerVariante = (index) => {
   exibirAtributosVariante.value.splice(index, 1)
 }
 
+const removerHabilidade = (index) => {
+  raca.value.habilidades.splice(index, 1)
+}
+
 const finalizarRaca = () => {
   if(raca.value.nome === '') return
   if(raca.value.deslocamento === null || raca.value.deslocamento > 999) return
@@ -183,6 +183,25 @@ const finalizarRaca = () => {
       :min="0"
       :max="99"
     />
+    <label>Descrição</label>
+    <!-- editorStyle="height: 320px" -->
+    <p-editor v-model="raca.descricao">
+      <template #toolbar>
+        <span class="ql-formats">
+          <button class="ql-bold"></button>
+          <button class="ql-italic"></button>
+          <button class="ql-underline"></button>
+        </span>
+        <span class="ql-formats">
+          <button class="ql-list" value="ordered"></button>
+          <button class="ql-list" value="bullet"></button>
+        </span>
+        <span class="ql-formats">
+          <button class="ql-link"></button>
+          <button class="ql-clean"></button>
+        </span>
+      </template>
+    </p-editor>
   </div>
   <div>
     <h2>Modificadores de Atributo</h2>
@@ -300,11 +319,11 @@ const finalizarRaca = () => {
       />
       <label for="excecao-atributo">Atributo</label>
       <p-dropdown 
-      id="excecao-atributo"
-      v-model="excecaoAtributoField"
-      :options="excecaoDropdownOptions"
-      :disabled="!excecaoSwitch"
-    />
+        id="excecao-atributo"
+        v-model="excecaoAtributoField"
+        :options="excecaoDropdownOptions"
+        :disabled="!excecaoSwitch"
+      />
     </div>
   </div>
   <div>
@@ -312,39 +331,15 @@ const finalizarRaca = () => {
     <div v-for="(habilidade, index) in raca.habilidades" :key="index">
       <h3>{{habilidade.nome}}</h3>
       <div v-html="habilidade.descricao"></div>
+      <p-button 
+        label="Remover"
+        @click="removerHabilidade(index)"
+      />
     </div>
   </div>
-  <div>
-    <h2>Adicionar Habilidades</h2>
-    <label for="nome-habilidade">Nome</label>
-    <p-input-text 
-      id="nome-habilidade"
-      v-model="habilidade.nome"
-    />
-    <label>Descrição</label>
-    <!-- editorStyle="height: 320px" -->
-    <p-editor v-model="habilidade.descricao">
-      <template #toolbar>
-        <span class="ql-formats">
-          <button class="ql-bold"></button>
-          <button class="ql-italic"></button>
-          <button class="ql-underline"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-list" value="ordered"></button>
-          <button class="ql-list" value="bullet"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-link"></button>
-          <button class="ql-clean"></button>
-        </span>
-      </template>
-    </p-editor>
-    <p-button 
-      label="Adicionar"
-      @click="adicionarHabilidade"
-    />
-  </div>
+  <AdicionarHabilidade 
+    @adicionarHabilidade="adicionarHabilidade"
+  />
   <div>
     <p-button 
       label="Finalizar Criação"
