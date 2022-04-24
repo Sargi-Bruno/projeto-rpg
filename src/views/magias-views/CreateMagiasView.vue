@@ -1,6 +1,10 @@
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { _addDoc } from '../../firebase/firestore'
 
+const router = useRouter()
+const finalizandoCadastro = ref(false)
 const classificacaoOptions = [
   'Arcana',
   'Divina',
@@ -24,18 +28,18 @@ const escolaOptions = [
   {label: 'Transmutação'},
 ]
 const execucaoOptions = [
-  'Livre',
-  'Padrão',
-  'Movimento',
-  'Completa',
+  'livre',
+  'padrão',
+  'movimento',
+  'completa',
 ]
 const alanceOptions = [
-  'Pessoal',
-  'Toque',
-  'Curto',
-  'Médio',
-  'Longo',
-  'Ilimitado',
+  'pessoal',
+  'toque',
+  'curto',
+  'médio',
+  'longo',
+  'ilimitado',
 ]
 const magia = ref({
   nome: '',
@@ -43,13 +47,19 @@ const magia = ref({
   classificacao: 'Arcana', // Arcana, Divina, Universal 
   circulo: 1,
   escola: '', // Abjuração, Adivinhação, Convocação, Encantamento, Evocação, Ilusão, Necromancia, Transmutação
-  execucao: 'Padrão', // Livre, Padrão, Movimento, Completa
-  alcance: 'Médio', // Pessoal, Toque, Curto, Médio, Longo, Ilimitado
+  execucao: 'padrão', // Livre, Padrão, Movimento, Completa
+  alcance: 'médio', // Pessoal, Toque, Curto, Médio, Longo, Ilimitado
   alvo: '',
   area: '',
   duracao: '',
   resistencia: '', // opcional
 })
+
+const finalizarCadastro = () => {
+  finalizandoCadastro.value = true
+  _addDoc('magias', magia.value)
+  router.push({ name: 'home' })
+}
 </script>
 
 <template>
@@ -62,24 +72,7 @@ const magia = ref({
       autocomplete="off"
     />
     <label>Descrição</label>
-    <!-- editorStyle="height: 320px" -->
-    <p-editor v-model="magia.descricao">
-      <template #toolbar>
-        <span class="ql-formats">
-          <button class="ql-bold"></button>
-          <button class="ql-italic"></button>
-          <button class="ql-underline"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-list" value="ordered"></button>
-          <button class="ql-list" value="bullet"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-link"></button>
-          <button class="ql-clean"></button>
-        </span>
-      </template>
-    </p-editor>
+    <p-editor v-model="magia.descricao" />
     <label for="classificacao">Classificação</label>
     <p-dropdown 
       id="classificacao"
@@ -136,4 +129,9 @@ const magia = ref({
       v-model="magia.resistencia"
     />
   </div>
+  <p-button
+    label="Finalizar"
+    @click="finalizarCadastro"
+    :disabled="finalizandoCadastro"
+  />
 </template>

@@ -1,5 +1,10 @@
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { _addDoc } from '../../firebase/firestore'
+
+const router = useRouter()
+const finalizandoCadastro = ref(false)
 
 const canalizarEnergiaOptions = [
   'Positiva',
@@ -18,6 +23,12 @@ const deus = ref({
   obrigacoesRestricoes: '',
   poderesConcedidos: '',
 })
+
+const finalizarCadastro = () => {
+  finalizandoCadastro.value = true
+  _addDoc('deuses', deus.value)
+  router.push({ name: 'home' })
+}
 </script>
 
 <template>
@@ -29,87 +40,19 @@ const deus = ref({
       v-model="deus.nome"
     />
     <label>Descrição</label>
-    <!-- editorStyle="height: 320px" -->
-    <p-editor v-model="deus.descricao">
-      <template #toolbar>
-        <span class="ql-formats">
-          <button class="ql-bold"></button>
-          <button class="ql-italic"></button>
-          <button class="ql-underline"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-list" value="ordered"></button>
-          <button class="ql-list" value="bullet"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-link"></button>
-          <button class="ql-clean"></button>
-        </span>
-      </template>
-    </p-editor>
+    <p-editor v-model="deus.descricao" />
   </div>
   <div>
     <label>Crenças e Objetivos</label>
-    <!-- editorStyle="height: 320px" -->
-    <p-editor v-model="deus.crencasObjetivos">
-      <template #toolbar>
-        <span class="ql-formats">
-          <button class="ql-bold"></button>
-          <button class="ql-italic"></button>
-          <button class="ql-underline"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-list" value="ordered"></button>
-          <button class="ql-list" value="bullet"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-link"></button>
-          <button class="ql-clean"></button>
-        </span>
-      </template>
-    </p-editor>
+    <p-editor v-model="deus.crencasObjetivos" />
   </div>
   <div>
     <label>Devotos</label>
-    <!-- editorStyle="height: 320px" -->
-    <p-editor v-model="deus.devotos">
-      <template #toolbar>
-        <span class="ql-formats">
-          <button class="ql-bold"></button>
-          <button class="ql-italic"></button>
-          <button class="ql-underline"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-list" value="ordered"></button>
-          <button class="ql-list" value="bullet"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-link"></button>
-          <button class="ql-clean"></button>
-        </span>
-      </template>
-    </p-editor>
+    <p-editor v-model="deus.devotos" />
   </div>
   <div>
     <label>Símbolo Sagrado</label>
-    <!-- editorStyle="height: 320px" -->
-    <p-editor v-model="deus.crencasObjetivos">
-      <template #toolbar>
-        <span class="ql-formats">
-          <button class="ql-bold"></button>
-          <button class="ql-italic"></button>
-          <button class="ql-underline"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-list" value="ordered"></button>
-          <button class="ql-list" value="bullet"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-link"></button>
-          <button class="ql-clean"></button>
-        </span>
-      </template>
-    </p-editor>
+    <p-editor v-model="deus.crencasObjetivos" />
   </div>
   <div>
     <label for="canalizar-energia">Canalizar Energia</label>
@@ -121,65 +64,19 @@ const deus = ref({
   </div>
   <div>
     <label>Arma Preferida</label>
-    <!-- editorStyle="height: 320px" -->
-    <p-editor v-model="deus.armaPreferida">
-      <template #toolbar>
-        <span class="ql-formats">
-          <button class="ql-bold"></button>
-          <button class="ql-italic"></button>
-          <button class="ql-underline"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-list" value="ordered"></button>
-          <button class="ql-list" value="bullet"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-link"></button>
-          <button class="ql-clean"></button>
-        </span>
-      </template>
-    </p-editor>
+    <p-editor v-model="deus.armaPreferida" />
   </div>
   <div>
     <label>Obrigações e Restrições</label>
-    <!-- editorStyle="height: 320px" -->
-    <p-editor v-model="deus.obrigacoesRestricoes">
-      <template #toolbar>
-        <span class="ql-formats">
-          <button class="ql-bold"></button>
-          <button class="ql-italic"></button>
-          <button class="ql-underline"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-list" value="ordered"></button>
-          <button class="ql-list" value="bullet"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-link"></button>
-          <button class="ql-clean"></button>
-        </span>
-      </template>
-    </p-editor>
+    <p-editor v-model="deus.obrigacoesRestricoes" />
   </div>
   <div>
     <label>Poderes Concedidos</label>
-    <!-- editorStyle="height: 320px" -->
-    <p-editor v-model="deus.poderesConcedidos">
-      <template #toolbar>
-        <span class="ql-formats">
-          <button class="ql-bold"></button>
-          <button class="ql-italic"></button>
-          <button class="ql-underline"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-list" value="ordered"></button>
-          <button class="ql-list" value="bullet"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-link"></button>
-          <button class="ql-clean"></button>
-        </span>
-      </template>
-    </p-editor>
+    <p-editor v-model="deus.poderesConcedidos" />
   </div>
+  <p-button
+    label="Finalizar"
+    @click="finalizarCadastro"
+    :disabled="finalizandoCadastro"
+  />
 </template>

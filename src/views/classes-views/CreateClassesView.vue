@@ -1,15 +1,19 @@
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { _addDoc } from '../../firebase/firestore'
 import AdicionarHabilidade from '../../components/AdicionarHabilidade.vue'
 
+const router = useRouter()
+const finalizandoCadastro = ref(false)
 const proficienciasOptions = [
   'Armas marciais',
   'Armaduras pesadas',
   'Escudos',
 ]
 const tipoMagiaOptions = [
-  {label: 'Arcana', value: 'arcana'},
-  {label: 'Divina', value: 'divina'},
+  'Arcana',
+  'Divina',
 ]
 const intervaloAprendizadoOptions = [
   {label: 'cada nível', value: 0},
@@ -17,49 +21,43 @@ const intervaloAprendizadoOptions = [
   {label: 'cada nível ímpar', value: 2},
 ]
 const atributoChaveOptions = [
-  {label: 'Inteligência', value: 'inteligencia'},
-  {label: 'Sabedoria', value: 'sabedoria'},
-  {label: 'Carisma', value: 'carisma'},
+  'Inteligência',
+  'Sabedoria',
+  'Carisma',
 ]
-const atributosDicionario = {
-  inteligencia: 'Inteligência',
-  sabedoria: 'Sabedoria',
-  carisma: 'Carisma',
-}
 const periciasOptions = [
-  {label: 'Acrobacia (Des)', value: 'Acrobacia (Des)'},
-  {label: 'Adestramento (Car)', value: 'Adestramento (Car)'},
-  {label: 'Atletismo (For)', value: 'Atletismo (For)'},
-  {label: 'Atuação (Car)', value: 'Atuação (Car)'},
-  {label: 'Cavalgar (Des)', value: 'Cavalgar (Des)'},
-  {label: 'Conhecimento (Int)', value: 'Conhecimento (Int)'},
-  {label: 'Cura (Sab)', value: 'Cura (Sab)'},
-  {label: 'Diplomacia (Car)', value: 'Diplomacia (Car)'},
-  {label: 'Enganação (Car)', value: 'Enganação (Car)'},
-  {label: 'Fortitude (Con)', value: 'Fortitude (Con)'},
-  {label: 'Furtividade (Des)', value: 'Furtividade (Des)'},
-  {label: 'Guerra (Int)', value: 'Guerra (Int)'},
-  {label: 'Iniciativa (Des)', value: 'Iniciativa (Des)'},
-  {label: 'Intimidação (Car)', value: 'Intimidação (Car)'},
-  {label: 'Intuição (Sab)', value: 'Intuição (Sab)'},
-  {label: 'Investigação (Int)', value: 'Investigação (Int)'},
-  {label: 'Jogatina (Car)', value: 'Jogatina (Car)'},
-  {label: 'Ladinagem (Des)', value: 'Ladinagem (Des)'},
-  {label: 'Luta (For)', value: 'Luta (For)'},
-  {label: 'Misticismo (Int)', value: 'Misticismo (Int)'},
-  {label: 'Nobreza (Int)', value: 'Nobreza (Int)'},
-  {label: 'Ofício (Int)', value: 'Ofício (Int)'},
-  {label: 'Percepção (Sab)', value: 'Percepção (Sab)'},
-  {label: 'Pilotagem (Des)', value: 'Pilotagem (Des)'},
-  {label: 'Pontaria (Des)', value: 'Pontaria (Des)'},
-  {label: 'Reflexos (Des)', value: 'Reflexos (Des)'},
-  {label: 'Religião (Sab)', value: 'Religião (Sab)'},
-  {label: 'Sobrevivência (Sab)', value: 'Sobrevivência (Sab)'},
-  {label: 'Vontade (Sab)', value: 'Vontade (Sab)'},
+  {label: 'Acrobacia (Des)'},
+  {label: 'Adestramento (Car)'},
+  {label: 'Atletismo (For)'},
+  {label: 'Atuação (Car)'},
+  {label: 'Cavalgar (Des)'},
+  {label: 'Conhecimento (Int)'},
+  {label: 'Cura (Sab)'},
+  {label: 'Diplomacia (Car)'},
+  {label: 'Enganação (Car)'},
+  {label: 'Fortitude (Con)'},
+  {label: 'Furtividade (Des)'},
+  {label: 'Guerra (Int)'},
+  {label: 'Iniciativa (Des)'},
+  {label: 'Intimidação (Car)'},
+  {label: 'Intuição (Sab)'},
+  {label: 'Investigação (Int)'},
+  {label: 'Jogatina (Car)'},
+  {label: 'Ladinagem (Des)'},
+  {label: 'Luta (For)'},
+  {label: 'Misticismo (Int)'},
+  {label: 'Nobreza (Int)'},
+  {label: 'Ofício (Int)'},
+  {label: 'Percepção (Sab)'},
+  {label: 'Pilotagem (Des)'},
+  {label: 'Pontaria (Des)'},
+  {label: 'Reflexos (Des)'},
+  {label: 'Religião (Sab)'},
+  {label: 'Sobrevivência (Sab)'},
+  {label: 'Vontade (Sab)'},
 ]
-
 const pericias = ref({
-  fixa: [],
+  concedidas: [],
   escolha1: '',
   escolha2: '',
   quantidade: 0,
@@ -71,11 +69,6 @@ const classe = ref({
   pvIniciais: 0,
   pvPorNivel: 0,
   pm: 0,
-  pericias: {
-    concedidas: [],
-    quantidade: 0,
-    opcoes: [],
-  },
   proficiencias: [],
   tabelaDeEvolucao: [],
   habilidades: [],
@@ -85,10 +78,10 @@ const magiasCaminhoSwitch = ref(false)
 const magiasCaminhoNome = ref('')
 const magias = ref({
   escolherEscolas: false,
-  tipoMagia: 'arcana',
+  tipoMagia: 'Arcana',
   quantidadeInicial: null,
   intervaloAprendizado: 0, // A cada nível, A cada nível par, a cada nível ímpar
-  atributoChave: 'inteligencia',
+  atributoChave: 'Inteligência',
   nivelCirculo2: null,
   nivelCirculo3: null,
   nivelCirculo4: null,
@@ -137,6 +130,17 @@ const adicionarMagias = () => {
 const removerMagias = (index) => {
   magiasAdicionadas.value.splice(index, 1)
 }
+
+const finalizarCadastro = () => {
+  finalizandoCadastro.value = true
+
+  classe.value.pericias = pericias.value
+
+  if(magiasAdicionadas.value.length > 0) classe.value.magias = magiasAdicionadas.value
+
+  _addDoc('classes', classe.value)
+  router.push({ name: 'home' })
+}
 </script>
 
 <template>
@@ -148,24 +152,7 @@ const removerMagias = (index) => {
       v-model="classe.nome"
     />
     <label>Descrição</label>
-    <!-- editorStyle="height: 320px" -->
-    <p-editor v-model="classe.descricao">
-      <template #toolbar>
-        <span class="ql-formats">
-          <button class="ql-bold"></button>
-          <button class="ql-italic"></button>
-          <button class="ql-underline"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-list" value="ordered"></button>
-          <button class="ql-list" value="bullet"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-link"></button>
-          <button class="ql-clean"></button>
-        </span>
-      </template>
-    </p-editor>
+    <p-editor v-model="classe.descricao" />
   </div>
   <div>
     <h2>Características de Classe</h2>
@@ -194,10 +181,10 @@ const removerMagias = (index) => {
     <label for="pericias-concedidas">Concedidas</label>
     <p-multi-select
       id="pericias-concedidas"
-      v-model="pericias.fixa"
+      v-model="pericias.concedidas"
       :options="periciasOptions"
       optionLabel="label"
-      optionValue="value"
+      optionValue="label"
       :filter="true"
     />
     <label for="pericias-escolha1">Escolhas</label>
@@ -206,7 +193,7 @@ const removerMagias = (index) => {
       v-model="pericias.escolha1"
       :options="periciasOptions"
       optionLabel="label"
-      optionValue="value"
+      optionValue="label"
       :filter="true"
     />
     <label for="pericias-escolha2">ou</label>
@@ -215,7 +202,7 @@ const removerMagias = (index) => {
       v-model="pericias.escolha2"
       :options="periciasOptions"
       optionLabel="label"
-      optionValue="value"
+      optionValue="label"
       :filter="true"
     />
     <label for="pericias-quantidade">Quantidade que pode escolher</label>
@@ -231,7 +218,7 @@ const removerMagias = (index) => {
       v-model="pericias.opcoes"
       :options="periciasOptions"
       optionLabel="label"
-      optionValue="value"
+      optionValue="label"
       :filter="true"
     />
     <label for="proficiencias">Proficiências</label>
@@ -317,8 +304,8 @@ const removerMagias = (index) => {
         de testes de Misticismo
       </p>
       <p>
-        Seu atributo-chave para lançar magias é {{atributosDicionario[magias.atributoChave]}}
-        e você soma seu bônus de {{atributosDicionario[magias.atributoChave]}} no seu
+        Seu atributo-chave para lançar magias é {{magias.atributoChave}}
+        e você soma seu bônus de {{magias.atributoChave}} no seu
         total de PM.
       </p>
       <p-button 
@@ -326,9 +313,7 @@ const removerMagias = (index) => {
         @click="removerMagias(index)"
       />
     </div>
-    
-
-    <h3>Adicionar Habilidade Magias</h3>
+    <h3>Adicionar Magias</h3>
     <label for="escolas-de-magia-switch">Possui diferentes caminhos?</label>
     <p-input-switch 
       id="escolas-de-magia-switch"
@@ -350,8 +335,6 @@ const removerMagias = (index) => {
       id="tipo-magia"
       v-model="magias.tipoMagia"
       :options="tipoMagiaOptions"
-      optionLabel="label"
-      optionValue="value"
     />
     <label for="quantidade-magias">Quantidade de Magias Iniciais</label>
     <p-input-number 
@@ -372,8 +355,6 @@ const removerMagias = (index) => {
       id="atributo-chave"
       v-model="magias.atributoChave"
       :options="atributoChaveOptions"
-      optionLabel="label"
-      optionValue="value"
     />
     <h4>Nível que aprende novos círculos de magia</h4>
     <label for="circulo-2">2º círculo</label>
@@ -411,10 +392,9 @@ const removerMagias = (index) => {
       @click="adicionarMagias"
     />
   </div>
-  <!-- <div>
-    <p-button 
-      label="Finalizar Criação"
-      @click=""
-    />
-  </div> -->
+  <p-button
+    label="Finalizar"
+    @click="finalizarCadastro"
+    :disabled="finalizandoCadastro"
+  />
 </template>

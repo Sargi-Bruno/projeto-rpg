@@ -1,6 +1,10 @@
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { _addDoc } from '../../firebase/firestore'
 
+const router = useRouter()
+const finalizandoCadastro = ref(false)
 const categoriaOptions = [
   'Combate',
   'Destino',
@@ -8,13 +12,18 @@ const categoriaOptions = [
   'Concedidos',
   'Tormenta',
 ]
-
 const poderGeral = ref({
   nome: '',
   categoria: '', // Combate, Destino, Magia, Concedidos, Tormenta
   descricao: '',
   habilidadeMagica: false,
 })
+
+const finalizarCadastro = () => {
+  finalizandoCadastro.value = true
+  _addDoc('poderes-gerais', poderGeral.value)
+  router.push({ name: 'home' })
+}
 </script>
 
 <template>
@@ -39,23 +48,11 @@ const poderGeral = ref({
       v-model="poderGeral.habilidadeMagica"
     />
     <label>Descrição</label>
-    <!-- editorStyle="height: 320px" -->
-    <p-editor v-model="poderGeral.descricao">
-      <template #toolbar>
-        <span class="ql-formats">
-          <button class="ql-bold"></button>
-          <button class="ql-italic"></button>
-          <button class="ql-underline"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-list" value="ordered"></button>
-          <button class="ql-list" value="bullet"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-link"></button>
-          <button class="ql-clean"></button>
-        </span>
-      </template>
-    </p-editor>
+    <p-editor v-model="poderGeral.descricao" />
   </div>
+  <p-button
+    label="Finalizar"
+    @click="finalizarCadastro"
+    :disabled="finalizandoCadastro"
+  />
 </template>

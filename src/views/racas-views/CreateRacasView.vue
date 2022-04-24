@@ -1,7 +1,11 @@
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { _addDoc } from '../../firebase/firestore'
 import AdicionarHabilidade from '../../components/AdicionarHabilidade.vue'
 
+const router = useRouter()
+const finalizandoCadastro = ref(false)
 const atributosDicionario = {
   forca: 'Força',
   destreza: 'Destreza',
@@ -142,10 +146,12 @@ const removerHabilidade = (index) => {
   raca.value.habilidades.splice(index, 1)
 }
 
-const finalizarRaca = () => {
+const finalizarCadastro = () => {
   if(raca.value.nome === '') return
   if(raca.value.deslocamento === null || raca.value.deslocamento > 999) return
   if(raca.value.tipoAtributos === '') return
+
+  finalizandoCadastro.value = true
 
   if(raca.value.tipoAtributos === 'fixo') {
     raca.value.atributos = atributosFixo.value
@@ -158,7 +164,8 @@ const finalizarRaca = () => {
     if(excecaoAtributo.value) raca.value.excecaoAtributo = excecaoAtributo.value
   }
     
-  console.log(raca.value)
+  _addDoc('racas', raca.value)
+  router.push({ name: 'home' })
 }
 </script>
 
@@ -184,24 +191,7 @@ const finalizarRaca = () => {
       :max="99"
     />
     <label>Descrição</label>
-    <!-- editorStyle="height: 320px" -->
-    <p-editor v-model="raca.descricao">
-      <template #toolbar>
-        <span class="ql-formats">
-          <button class="ql-bold"></button>
-          <button class="ql-italic"></button>
-          <button class="ql-underline"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-list" value="ordered"></button>
-          <button class="ql-list" value="bullet"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-link"></button>
-          <button class="ql-clean"></button>
-        </span>
-      </template>
-    </p-editor>
+    <p-editor v-model="raca.descricao" />
   </div>
   <div>
     <h2>Modificadores de Atributo</h2>
@@ -340,10 +330,9 @@ const finalizarRaca = () => {
   <AdicionarHabilidade 
     @adicionarHabilidade="adicionarHabilidade"
   />
-  <div>
-    <p-button 
-      label="Finalizar Criação"
-      @click="finalizarRaca"
-    />
-  </div>
+  <p-button
+    label="Finalizar"
+    @click="finalizarCadastro"
+    :disabled="finalizandoCadastro"
+  />
 </template>

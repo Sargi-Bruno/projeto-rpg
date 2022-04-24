@@ -54,23 +54,7 @@ const adicionarHabilidade = () => {
     />
     <label>Descrição</label>
     <!-- editorStyle="height: 320px" -->
-    <p-editor v-model="habilidade.descricao">
-      <template #toolbar>
-        <span class="ql-formats">
-          <button class="ql-bold"></button>
-          <button class="ql-italic"></button>
-          <button class="ql-underline"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-list" value="ordered"></button>
-          <button class="ql-list" value="bullet"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-link"></button>
-          <button class="ql-clean"></button>
-        </span>
-      </template>
-    </p-editor>
+    <p-editor v-model="habilidade.descricao" />
     <p-button 
       label="Adicionar"
       @click="adicionarHabilidade"

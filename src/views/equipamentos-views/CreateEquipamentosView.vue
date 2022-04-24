@@ -1,6 +1,10 @@
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { _addDoc } from '../../firebase/firestore'
 
+const router = useRouter()
+const finalizandoCadastro = ref(false)
 const categoriaOptions = [
   'Arma',
   'Armadura',
@@ -71,7 +75,7 @@ const classificacaoItensOptions = [
 const equipamento = ref({
   nome: '',
   descricao: '',
-  categoria: 'Arma',
+  categoria: 'Arma', // Arma, Armadura, Escudo, Itens e Serviços
 })
 const arma = ref({
   facilidadeDeUso: 'Simples', // Simples, Marcial, Exótica, De Fogo
@@ -99,6 +103,7 @@ const armadura = ref({
   peso: null,
 })
 const escudo = ref({
+  proposito: 'Corpo a Corpo', // Corpo a Corpo, Á Distância
   subdivisao: 'Uma Mão', // Leve, Uma Mão, Duas Mãos
   preco: null,
   defesa: 1,
@@ -121,6 +126,35 @@ const itens = ref({
   preco: null,
   peso: null,
 })
+
+const finalizarCadastro = () => {
+  finalizandoCadastro.value = true
+
+  if(equipamento.value.categoria === 'Arma') {
+    equipamento.value = {
+      ...equipamento.value,
+      ...arma.value
+      }
+  } else if(equipamento.value.categoria === 'Armadura') {
+    equipamento.value = {
+      ...equipamento.value,
+      ...armadura.value
+    }
+  } else if(equipamento.value.categoria === 'Escudo') {
+    equipamento.value = {
+      ...equipamento.value,
+      ...escudo.value
+    }
+  } else if(equipamento.value.categoria === 'Itens e Serviços') {
+    equipamento.value = {
+      ...equipamento.value,
+      ...itens.value
+    }
+  }
+  
+  _addDoc('equipamentos', equipamento.value)
+  router.push({ name: 'home' })
+}
 </script>
 
 <template>
@@ -133,24 +167,7 @@ const itens = ref({
       autocomplete="off"
     />
     <label>Descrição</label>
-    <!-- editorStyle="height: 320px" -->
-    <p-editor v-model="equipamento.descricao">
-      <template #toolbar>
-        <span class="ql-formats">
-          <button class="ql-bold"></button>
-          <button class="ql-italic"></button>
-          <button class="ql-underline"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-list" value="ordered"></button>
-          <button class="ql-list" value="bullet"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-link"></button>
-          <button class="ql-clean"></button>
-        </span>
-      </template>
-    </p-editor>
+    <p-editor v-model="equipamento.descricao" />
   </div>
   <!-- Categoria do Equipamento -->
   <h3>Categoria</h3>
@@ -171,12 +188,14 @@ const itens = ref({
       :options="propositoOptions"
     />
     <div v-if="arma.proposito === 'Corpo a Corpo'">
+      <label>Subdivisão</label>
       <p-select-button 
         v-model="arma.subdivisao"
         :options="subdivisaoCorpoACorpoOptions"
       />
     </div>
     <div v-else>
+      <label>Subdivisão</label>
       <p-select-button 
         v-model="arma.subdivisao"
         :options="subdivisaoADistanciaOptions"
@@ -290,11 +309,25 @@ const itens = ref({
     />
   </div>
   <div v-if="equipamento.categoria === 'Escudo'">
-    <label>Subdivisão</label>
+    <label>Propósito</label>
     <p-select-button 
-      v-model="escudo.subdivisao"
-      :options="subdivisaoCorpoACorpoOptions"
+      v-model="escudo.proposito"
+      :options="propositoOptions"
     />
+    <div v-if="escudo.proposito === 'Corpo a Corpo'">
+      <label>Subdivisão</label>
+      <p-select-button 
+        v-model="escudo.subdivisao"
+        :options="subdivisaoCorpoACorpoOptions"
+      />
+    </div>
+    <div v-else>
+      <label>Subdivisão</label>
+      <p-select-button 
+        v-model="escudo.subdivisao"
+        :options="subdivisaoADistanciaOptions"
+      />
+    </div>
     <label for="escudo-preco">Preço</label>
     <p-input-number 
       id="escudo-preco"
@@ -414,4 +447,9 @@ const itens = ref({
       :maxFractionDigits="1"
     />
   </div>
+  <p-button
+    label="Finalizar"
+    @click="finalizarCadastro"
+    :disabled="finalizandoCadastro"
+  />
 </template>

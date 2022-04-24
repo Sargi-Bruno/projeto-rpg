@@ -1,6 +1,10 @@
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { _addDoc } from '../../firebase/firestore'
 
+const router = useRouter()
+const finalizandoCadastro = ref(false)
 const origem = ref({
   nome: '',
   descricao: '',
@@ -11,6 +15,12 @@ const origem = ref({
     descricao: '',
   }
 })
+
+const finalizarCadastro = () => {
+  finalizandoCadastro.value = true
+  _addDoc('origens', origem.value)
+  router.push({ name: 'home' })
+}
 </script>
 
 <template>
@@ -22,66 +32,15 @@ const origem = ref({
       v-model="origem.nome"
     />
     <label>Descrição</label>
-    <!-- editorStyle="height: 320px" -->
-    <p-editor v-model="origem.descricao">
-      <template #toolbar>
-        <span class="ql-formats">
-          <button class="ql-bold"></button>
-          <button class="ql-italic"></button>
-          <button class="ql-underline"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-list" value="ordered"></button>
-          <button class="ql-list" value="bullet"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-link"></button>
-          <button class="ql-clean"></button>
-        </span>
-      </template>
-    </p-editor>
+    <p-editor v-model="origem.descricao" />
   </div>
   <div>
     <label>Itens</label>
-    <!-- editorStyle="height: 320px" -->
-    <p-editor v-model="origem.itens">
-      <template #toolbar>
-        <span class="ql-formats">
-          <button class="ql-bold"></button>
-          <button class="ql-italic"></button>
-          <button class="ql-underline"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-list" value="ordered"></button>
-          <button class="ql-list" value="bullet"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-link"></button>
-          <button class="ql-clean"></button>
-        </span>
-      </template>
-    </p-editor>
+    <p-editor v-model="origem.itens" />
   </div>
   <div>
     <label>Benefícios</label>
-    <!-- editorStyle="height: 320px" -->
-    <p-editor v-model="origem.beneficios">
-      <template #toolbar>
-        <span class="ql-formats">
-          <button class="ql-bold"></button>
-          <button class="ql-italic"></button>
-          <button class="ql-underline"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-list" value="ordered"></button>
-          <button class="ql-list" value="bullet"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-link"></button>
-          <button class="ql-clean"></button>
-        </span>
-      </template>
-    </p-editor>
+    <p-editor v-model="origem.beneficios" />
   </div>
   <div>
     <h4>Poder Único</h4>
@@ -91,26 +50,11 @@ const origem = ref({
       v-model="origem.poderUnico.nome"
     />
     <label>Descrição</label>
-    <!-- editorStyle="height: 320px" -->
-    <p-editor v-model="origem.poderUnico.descricao">
-      <template #toolbar>
-        <span class="ql-formats">
-          <button class="ql-bold"></button>
-          <button class="ql-italic"></button>
-          <button class="ql-underline"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-list" value="ordered"></button>
-          <button class="ql-list" value="bullet"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-link"></button>
-          <button class="ql-clean"></button>
-        </span>
-      </template>
-    </p-editor>
+    <p-editor v-model="origem.poderUnico.descricao" />
   </div>
-  <p-button 
-      label="Finalizar"
+  <p-button
+    label="Finalizar"
+    @click="finalizarCadastro"
+    :disabled="finalizandoCadastro"
   />
 </template>

@@ -27,8 +27,9 @@ export const firestore = getFirestore()
 
 export const _addDoc = async (collectionName, doc) => {
     doc.timestamp = serverTimestamp()
+    doc.nome = doc.nome.trim()
+    doc.searchField = doc.nome.replace(/ /g, '').toLowerCase()
     // doc.timestamp = Date.now()
-    // doc.name = doc.name.trim()
 
     addDoc(collection(firestore, collectionName), doc)
         .then(doc => {
