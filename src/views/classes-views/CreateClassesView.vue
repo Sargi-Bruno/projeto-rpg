@@ -353,13 +353,12 @@ const removerMagias = (index) => {
       optionLabel="label"
       optionValue="value"
     />
-    <form autocomplete="off">
-      <label for="quantidade-magias">Quantidade de Magias Iniciais</label>
-      <p-input-number 
-        id="quantidade-magias"
-        v-model="magias.quantidadeInicial"
-      />
-    </form>
+    <label for="quantidade-magias">Quantidade de Magias Iniciais</label>
+    <p-input-number 
+      id="quantidade-magias"
+      v-model="magias.quantidadeInicial"
+      autocomplete="off"
+    />
     <label for="intervalo-aprendizado">Aprende magias a</label>
     <p-dropdown
       id="intervalo-aprendizado"
@@ -377,28 +376,30 @@ const removerMagias = (index) => {
       optionValue="value"
     />
     <h4>Nível que aprende novos círculos de magia</h4>
-    <form autocomplete="off">
-      <label for="circulo-2">2º círculo</label>
-      <p-input-number 
-        id="circulo-2"
-        v-model="magias.nivelCirculo2"
-      />
-      <label for="circulo-3">3º círculo</label>
-      <p-input-number 
-        id="circulo-3"
-        v-model="magias.nivelCirculo3"
-      />
-      <label for="circulo-4">4º círculo</label>
-      <p-input-number 
-        id="circulo-4"
-        v-model="magias.nivelCirculo4"
-      />
-      <label for="circulo-5">5º círculo</label>
-      <p-input-number 
-        id="circulo-5"
-        v-model="magias.nivelCirculo5"
-      />
-    </form>
+    <label for="circulo-2">2º círculo</label>
+    <p-input-number 
+      id="circulo-2"
+      v-model="magias.nivelCirculo2"
+      autocomplete="off"
+    />
+    <label for="circulo-3">3º círculo</label>
+    <p-input-number 
+      id="circulo-3"
+      v-model="magias.nivelCirculo3"
+      autocomplete="off"
+    />
+    <label for="circulo-4">4º círculo</label>
+    <p-input-number 
+      id="circulo-4"
+      v-model="magias.nivelCirculo4"
+      autocomplete="off"
+    />
+    <label for="circulo-5">5º círculo</label>
+    <p-input-number 
+      id="circulo-5"
+      v-model="magias.nivelCirculo5"
+      autocomplete="off"
+    />
     <label for="armadura-leve-switch">Pode utilizar armadura leve sem penalidade?</label>
     <p-input-switch 
       id="armadura-leve-switch"
