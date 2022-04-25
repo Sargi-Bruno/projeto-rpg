@@ -1,18 +1,13 @@
 <script setup>
 import { onMounted, ref } from 'vue'
-import { RouterLink, useRouter } from 'vue-router'
+import { RouterLink } from 'vue-router'
 import { _getDocs } from '../../firebase/firestore'
 
-const router = useRouter()
 const classes = ref([])
 
 onMounted(async () => {
   classes.value = await _getDocs('classes')
 })
-
-const handleDetails = (docId) => {
-  router.push({ name: 'detalhes-classe', params: { id: docId } })
-}
 </script>
 
 <template>
@@ -29,10 +24,9 @@ const handleDetails = (docId) => {
         <div v-html="classe.descricao"></div>
       </template>
       <template #footer>
-        <p-button 
-          label="Ver mais"
-          @click="handleDetails(classe.id)"
-        />
+        <RouterLink :to="{ name: 'detalhes-classe', params: { id: classe.id } }">
+          Ver mais
+        </RouterLink>
       </template>
     </p-card>
   </div>

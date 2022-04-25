@@ -43,8 +43,8 @@ export const _getDoc = async (collectionName, id) => {
     const querySnapshot = await getDoc(doc(firestore, collectionName, id))
 
     return {
-        ...querySnapshot.doc.data(),
-        id: querySnapshot.doc.id
+        ...querySnapshot.data(),
+        id: querySnapshot.id
     }
 }
 

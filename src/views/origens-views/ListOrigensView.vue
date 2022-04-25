@@ -1,18 +1,13 @@
 <script setup>
 import { onMounted, ref } from 'vue'
-import { RouterLink, useRouter } from 'vue-router'
+import { RouterLink } from 'vue-router'
 import { _getDocs } from '../../firebase/firestore'
 
-const router = useRouter()
 const origens = ref([])
 
 onMounted(async () => {
   origens.value = await _getDocs('origens')
 })
-
-const handleDetails = (docId) => {
-  router.push({ name: 'detalhes-origem', params: { id: docId } })
-}
 </script>
 
 <template>
@@ -23,16 +18,15 @@ const handleDetails = (docId) => {
   <div v-for="origem in origens" :key="origem.id">
     <p-card>
       <template #title>
-          {{origem.nome}}
+        {{origem.nome}}
       </template>
       <template #content>
         <div v-html="origem.descricao"></div>
       </template>
       <template #footer>
-        <p-button 
-          label="Ver mais"
-          @click="handleDetails(origem.id)"
-        />
+        <RouterLink :to="{ name: 'detalhes-origem', params: { id: origem.id } }">
+          Ver mais
+        </RouterLink>
       </template>
     </p-card>
   </div>
