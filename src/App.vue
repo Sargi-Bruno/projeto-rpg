@@ -1,57 +1,27 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-// import { ref } from 'vue'
 
-// const selectedCars = ref(null)
-// const cars = ref([
-//   {brand: 'Audi', value: 'Audi'},
-//   {brand: 'BMW', value: 'BMW'},
-//   {brand: 'Fiat', value: 'Fiat'},
-//   {brand: 'Honda', value: 'Honda'},
-//   {brand: 'Jaguar', value: 'Jaguar'},
-//   {brand: 'Mercedes', value: 'Mercedes'},
-//   {brand: 'Renault', value: 'Renault'},
-//   {brand: 'Volkswagen', value: 'Volkswagen'},
-//   {brand: 'Volvo', value: 'Volvo'}
-// ])
+const items = [
+  {label: 'Início', name: 'home'},
+  {label: 'Raças', name: 'listar-racas'},
+  {label: 'Classes', name: 'listar-classes'},
+  {label: 'Origens', name: 'listar-origens'},
+  {label: 'Deuses', name: 'listar-deuses'},
+  {label: 'Poderes Gerais', name: 'listar-poderes-gerais'},
+  {label: 'Equipamentos', name: 'listar-equipamentos'},
+  {label: 'Magias', name: 'listar-magias'},
+]
 </script>
 
 <template>
-  <header>
-    <div class="wrapper">
-      <nav>
-        <h1 class="title">Projeto RPG</h1>
-        <RouterLink :to="{ name: 'home' }">Início</RouterLink>
-        <RouterLink :to="{ name: 'criar-raca' }">Raças</RouterLink>
-        <RouterLink :to="{ name: 'criar-classe' }">Classes</RouterLink>
-        <RouterLink :to="{ name: 'criar-origem' }">Origens</RouterLink>
-        <RouterLink :to="{ name: 'criar-deus' }">Deuses</RouterLink>
-        <RouterLink :to="{ name: 'criar-poder-geral' }">Poderes Gerais</RouterLink>
-        <RouterLink :to="{ name: 'criar-equipamento' }">Equipamentos</RouterLink>
-        <RouterLink :to="{ name: 'criar-magia' }">Magias</RouterLink>
-      </nav>
-    </div>
-    <!-- <p-button label="Botão"></p-button>
-    <p-input-number />
-    <p-multi-select v-model="selectedCars" :options="cars" optionLabel="brand" placeholder="Select Brands" />
-    <p-editor editorStyle="height: 320px">
-      <template #toolbar>
-        <span class="ql-formats">
-          <button class="ql-bold"></button>
-          <button class="ql-italic"></button>
-          <button class="ql-underline"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-list" value="ordered"></button>
-          <button class="ql-list" value="bullet"></button>
-        </span>
-        <span class="ql-formats">
-          <button class="ql-link"></button>
-          <button class="ql-clean"></button>
-        </span>
-      </template>
-    </p-editor> -->
-  </header>
+  <h1 class="title">Projeto RPG</h1>
+  <p-menubar :model="items">
+    <template #item="{item}">
+      <RouterLink :to="{ name: item.name }" class="p-menuitem-link">
+        {{item.label}}
+      </RouterLink>
+    </template>
+  </p-menubar>
 
   <RouterView />
 </template>
@@ -70,8 +40,7 @@ import { RouterLink, RouterView } from 'vue-router'
 }
 
 *, *::after, *::before {
-  box-sizing: border-box;
-  
+  box-sizing: border-box; 
 }
 
 body {

@@ -29,6 +29,7 @@ export const _addDoc = async (collectionName, doc) => {
     doc.timestamp = serverTimestamp()
     doc.nome = doc.nome.trim()
     doc.searchField = doc.nome.replace(/ /g, '').toLowerCase()
+    doc.collectionName = collectionName
     // doc.timestamp = Date.now()
 
     addDoc(collection(firestore, collectionName), doc)
@@ -39,31 +40,27 @@ export const _addDoc = async (collectionName, doc) => {
 }
 
 export const _getDoc = async (collectionName, id) => {
-    getDoc(doc(firestore, collectionName, id))
-        .then(doc => {
-            return {
-                ...doc.data(),
-                id: doc.id
-            }
-        })
-        .catch(err => console.log(err.message))
+    const querySnapshot = await getDoc(doc(firestore, collectionName, id))
+
+    return {
+        ...querySnapshot.doc.data(),
+        id: querySnapshot.doc.id
+    }
 }
 
 export const _getDocs = async (collectionName) => {
-    getDocs(collection(firestore, collectionName))
-        .then(snapshot => {
-            let docs = []
+    let docs = []
 
-            snapshot.docs.forEach((doc) => {
-                docs.push({
-                    ...doc.data(),
-                    id: doc.id
-                })
-            })
+    const querySnapshot = await getDocs(collection(firestore, collectionName))
 
-            return docs
+    querySnapshot.docs.forEach((doc) => {
+        docs.push({
+            ...doc.data(),
+            id: doc.id
         })
-        .catch(err => console.log(err.message))
+    })
+
+    return docs
 }
 
 export const _updateDoc = async (collectionName, doc) => {

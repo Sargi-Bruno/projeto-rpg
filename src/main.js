@@ -12,6 +12,8 @@ import MultiSelect from 'primevue/multiselect'
 import SelectButton from 'primevue/selectbutton'
 import InputSwitch from 'primevue/inputswitch'
 import Editor from 'primevue/editor'
+import Menubar from 'primevue/menubar'
+import Card from 'primevue/card'
 
 const app = createApp(App)
 
@@ -26,5 +28,7 @@ app.component('p-multi-select', MultiSelect)
 app.component('p-select-button', SelectButton)
 app.component('p-input-switch', InputSwitch)
 app.component('p-editor', Editor)
+app.component('p-menubar', Menubar)
+app.component('p-card', Card)
 
 app.mount('#app')
