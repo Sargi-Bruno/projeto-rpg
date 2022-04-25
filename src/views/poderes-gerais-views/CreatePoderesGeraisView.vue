@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router'
 import { _addDoc } from '../../firebase/firestore'
 
 const router = useRouter()
-const finalizandoCadastro = ref(false)
+const registerLoading = ref(false)
 const categoriaOptions = [
   'Combate',
   'Destino',
@@ -19,8 +19,8 @@ const poderGeral = ref({
   habilidadeMagica: false,
 })
 
-const finalizarCadastro = () => {
-  finalizandoCadastro.value = true
+const handleRegister = () => {
+  registerLoading.value = true
   _addDoc('poderes-gerais', poderGeral.value)
   router.push({ name: 'home' })
 }
@@ -52,7 +52,7 @@ const finalizarCadastro = () => {
   </div>
   <p-button
     label="Finalizar"
-    @click="finalizarCadastro"
-    :disabled="finalizandoCadastro"
+    @click="handleRegister"
+    :disabled="registerLoading"
   />
 </template>

@@ -18,7 +18,7 @@ onMounted(async () => {
   <div v-for="classe in classes" :key="classe.id">
     <p-card>
       <template #title>
-          {{classe.nome}}
+        {{classe.nome}}
       </template>
       <template #content>
         <div v-html="classe.descricao"></div>

@@ -9,7 +9,6 @@ import {
     updateDoc,
     deleteDoc,
     serverTimestamp,
-
 } from 'firebase/firestore'
 
 const firebaseConfig = {
@@ -63,12 +62,12 @@ export const _getDocs = async (collectionName) => {
     return docs
 }
 
-export const _updateDoc = async (collectionName, doc) => {
-    updateDoc(doc(firestore, collectionName, doc.id), doc)
+export const _updateDoc = async (data) => {
+    updateDoc(doc(firestore, data.collectionName, data.id), data)
         .catch(err => console.log(err.message))
 }
 
-export const _deleteDoc = async (collectionName, id) => {
-    deleteDoc(doc(firestore, collectionName, id))
+export const _deleteDoc = async (data) => {
+    deleteDoc(doc(firestore, data.collectionName, data.id))
         .catch(err => console.log(err.message))
 }

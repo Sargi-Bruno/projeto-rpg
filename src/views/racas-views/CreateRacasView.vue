@@ -5,7 +5,7 @@ import { _addDoc } from '../../firebase/firestore'
 import AdicionarHabilidade from '../../components/AdicionarHabilidade.vue'
 
 const router = useRouter()
-const finalizandoCadastro = ref(false)
+const registerLoading = ref(false)
 const atributosDicionario = {
   forca: 'Força',
   destreza: 'Destreza',
@@ -140,18 +140,19 @@ const AdicionarAtributos = () => {
 const removerVariante = (index) => {
   atributosVariante.value.splice(index, 1)
   exibirAtributosVariante.value.splice(index, 1)
+  variantesNomeLista.value.splice(index, 1)
 }
 
 const removerHabilidade = (index) => {
   raca.value.habilidades.splice(index, 1)
 }
 
-const finalizarCadastro = () => {
+const handleRegister = () => {
   if(raca.value.nome === '') return
   if(raca.value.deslocamento === null || raca.value.deslocamento > 999) return
   if(raca.value.tipoAtributos === '') return
 
-  finalizandoCadastro.value = true
+  registerLoading.value = true
 
   if(raca.value.tipoAtributos === 'fixo') {
     raca.value.atributos = atributosFixo.value
@@ -332,7 +333,7 @@ const finalizarCadastro = () => {
   />
   <p-button
     label="Finalizar"
-    @click="finalizarCadastro"
-    :disabled="finalizandoCadastro"
+    @click="handleRegister"
+    :disabled="registerLoading"
   />
 </template>

@@ -5,7 +5,7 @@ import { _addDoc } from '../../firebase/firestore'
 import AdicionarHabilidade from '../../components/AdicionarHabilidade.vue'
 
 const router = useRouter()
-const finalizandoCadastro = ref(false)
+const registerLoading = ref(false)
 const proficienciasOptions = [
   'Armas marciais',
   'Armaduras pesadas',
@@ -131,8 +131,8 @@ const removerMagias = (index) => {
   magiasAdicionadas.value.splice(index, 1)
 }
 
-const finalizarCadastro = () => {
-  finalizandoCadastro.value = true
+const handleRegister = () => {
+  registerLoading.value = true
 
   classe.value.pericias = pericias.value
 
@@ -394,7 +394,7 @@ const finalizarCadastro = () => {
   </div>
   <p-button
     label="Finalizar"
-    @click="finalizarCadastro"
-    :disabled="finalizandoCadastro"
+    @click="handleRegister"
+    :disabled="registerLoading"
   />
 </template>

@@ -18,7 +18,7 @@ onMounted(async () => {
   <div v-for="raca in racas" :key="raca.id">
     <p-card>
       <template #title>
-          {{raca.nome}}
+        {{raca.nome}}
       </template>
       <template #content>
         <div v-html="raca.descricao"></div>
