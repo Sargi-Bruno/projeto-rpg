@@ -7,7 +7,7 @@ const route = useRoute()
 const router = useRouter()
 const editLoading = ref(false)
 const deleteLoading = ref(false)
-const deus = ref()
+const divindade = ref()
 
 const canalizarEnergiaOptions = [
   'Positiva',
@@ -16,68 +16,68 @@ const canalizarEnergiaOptions = [
 ]
 
 onMounted(async () => {
-  deus.value = await _getDoc('deuses', route.params.id)
+  divindade.value = await _getDoc('divindades', route.params.id)
 })
 
 const handleEdit = () => {
   editLoading.value = true
-  _updateDoc(deus.value)
-  router.push({ name: 'listar-deuses' })
+  _updateDoc(divindade.value)
+  router.push({ name: 'listar-divindades' })
 }
 
 const handleDelete = () => {
   deleteLoading.value = true
-  _deleteDoc(deus.value)
-  router.push({ name: 'listar-deuses' })
+  _deleteDoc(divindade.value)
+  router.push({ name: 'listar-divindades' })
 }
 </script>
 
 <template>
   <div>
-    <h1>Editar Deus</h1>
-    <div v-if="deus">
+    <h1>Editar Divindade</h1>
+    <div v-if="divindade">
       <div>
         <label for="nome">Nome</label>
         <p-input-text 
           id="nome"
-          v-model="deus.nome"
+          v-model="divindade.nome"
         />
         <label>Descrição</label>
-        <p-editor v-model="deus.descricao" />
+        <p-editor v-model="divindade.descricao" />
       </div>
       <div>
         <label>Crenças e Objetivos</label>
-        <p-editor v-model="deus.crencasObjetivos" />
+        <p-editor v-model="divindade.crencasObjetivos" />
       </div>
       <div>
         <label>Devotos</label>
-        <p-editor v-model="deus.devotos" />
+        <p-editor v-model="divindade.devotos" />
       </div>
       <div>
         <label>Símbolo Sagrado</label>
-        <p-editor v-model="deus.crencasObjetivos" />
+        <p-editor v-model="divindade.crencasObjetivos" />
       </div>
       <div>
         <label for="canalizar-energia">Canalizar Energia</label>
         <p-dropdown
           id="canalizar-energia"
-          v-model="deus.canalizarEnergia"
+          v-model="divindade.canalizarEnergia"
           :options="canalizarEnergiaOptions"
         />
       </div>
       <div>
         <label>Arma Preferida</label>
-        <p-editor v-model="deus.armaPreferida" />
+        <p-editor v-model="divindade.armaPreferida" />
       </div>
       <div>
         <label>Obrigações e Restrições</label>
-        <p-editor v-model="deus.obrigacoesRestricoes" />
+        <p-editor v-model="divindade.obrigacoesRestricoes" />
       </div>
       <div>
         <label>Poderes Concedidos</label>
-        <p-editor v-model="deus.poderesConcedidos" />
+        <p-editor v-model="divindade.poderesConcedidos" />
       </div>
-      <RouterLink :to="{ name: 'listar-deuses' }">
+      <RouterLink :to="{ name: 'listar-divindades' }">
         Cancelar
       </RouterLink>
       <p-button

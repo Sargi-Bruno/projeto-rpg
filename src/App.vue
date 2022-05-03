@@ -1,16 +1,53 @@
 <script setup>
+import { onMounted, ref } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
+import { 
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup,
+    onAuthStateChanged,
+    signOut 
+} from 'firebase/auth'
 
+const auth = getAuth()
 const items = [
   {label: 'Início', name: 'home'},
   {label: 'Raças', name: 'listar-racas'},
   {label: 'Classes', name: 'listar-classes'},
   {label: 'Origens', name: 'listar-origens'},
-  {label: 'Deuses', name: 'listar-deuses'},
+  {label: 'Divindades', name: 'listar-divindades'},
   {label: 'Poderes Gerais', name: 'listar-poderes-gerais'},
   {label: 'Equipamentos', name: 'listar-equipamentos'},
   {label: 'Magias', name: 'listar-magias'},
+  {label: 'Personagens', name: 'listar-personagens'},
 ]
+const isLoggedIn = ref(false)
+
+onMounted(() => {
+  onAuthStateChanged(auth, (user) => {
+    if(user) isLoggedIn.value = true
+    else isLoggedIn.value = false
+  })
+})
+
+const handleSignIn = () => {
+  const provider = new GoogleAuthProvider()
+  signInWithPopup(getAuth(), provider)
+    .then(result => {
+      console.log(result.user)
+      // router.push('')
+    })
+    .catch(err => {
+      console.log(err)
+    })
+}
+
+const handleSignOut = () => {
+  signOut(auth)
+    .then(() => {
+      console.log('signOut')
+    })
+}
 </script>
 
 <template>
@@ -20,6 +57,20 @@ const items = [
       <RouterLink :to="{ name: item.name }" class="p-menuitem-link">
         {{item.label}}
       </RouterLink>
+    </template>
+    <template #end>
+      <div v-if="isLoggedIn === false">
+        <p-button 
+          label="Login"
+          @click="handleSignIn"
+        />
+      </div>
+      <div v-else>
+        <p-button 
+          label="Logout"
+          @click="handleSignOut"
+        />
+      </div>
     </template>
   </p-menubar>
 

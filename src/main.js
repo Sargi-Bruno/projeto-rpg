@@ -15,10 +15,25 @@ import Editor from 'primevue/editor'
 import Menubar from 'primevue/menubar'
 import Card from 'primevue/card'
 
+import { initializeApp } from 'firebase/app'
+// import { createPinia } from 'pinia'
+
+const firebaseConfig = {
+    apiKey: "AIzaSyDzhifEXXAAo0hNdghzuTZiOSDtp_MttWU",
+    authDomain: "projeto-rpg-f1c50.firebaseapp.com",
+    projectId: "projeto-rpg-f1c50",
+    storageBucket: "projeto-rpg-f1c50.appspot.com",
+    messagingSenderId: "851387745048",
+    appId: "1:851387745048:web:da1ffb95ae0a5871b6546d"
+  }
+
+initializeApp(firebaseConfig)
+
 const app = createApp(App)
 
 app.use(router)
 app.use(PrimeVue)
+// app.use(createPinia())
 
 app.component('p-button', Button)
 app.component('p-input-text', InputText)

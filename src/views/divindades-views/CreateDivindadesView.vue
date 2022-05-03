@@ -12,7 +12,7 @@ const canalizarEnergiaOptions = [
   'Qualquer',
 ]
 
-const deus = ref({
+const divindade = ref({
   nome: '',
   descricao: '',
   crencasObjetivos: '',
@@ -26,53 +26,53 @@ const deus = ref({
 
 const handleRegister = () => {
   registerLoading.value = true
-  _addDoc('deuses', deus.value)
+  _addDoc('divindades', divindade.value)
   router.push({ name: 'home' })
 }
 </script>
 
 <template>
-  <h1>Criar Deus</h1>
+  <h1>Criar Divindade</h1>
   <div>
     <label for="nome">Nome</label>
     <p-input-text 
       id="nome"
-      v-model="deus.nome"
+      v-model="divindade.nome"
     />
     <label>Descrição</label>
-    <p-editor v-model="deus.descricao" />
+    <p-editor v-model="divindade.descricao" />
   </div>
   <div>
     <label>Crenças e Objetivos</label>
-    <p-editor v-model="deus.crencasObjetivos" />
+    <p-editor v-model="divindade.crencasObjetivos" />
   </div>
   <div>
     <label>Devotos</label>
-    <p-editor v-model="deus.devotos" />
+    <p-editor v-model="divindade.devotos" />
   </div>
   <div>
     <label>Símbolo Sagrado</label>
-    <p-editor v-model="deus.crencasObjetivos" />
+    <p-editor v-model="divindade.simboloSagrado" />
   </div>
   <div>
     <label for="canalizar-energia">Canalizar Energia</label>
     <p-dropdown
       id="canalizar-energia"
-      v-model="deus.canalizarEnergia"
+      v-model="divindade.canalizarEnergia"
       :options="canalizarEnergiaOptions"
     />
   </div>
   <div>
     <label>Arma Preferida</label>
-    <p-editor v-model="deus.armaPreferida" />
+    <p-editor v-model="divindade.armaPreferida" />
   </div>
   <div>
     <label>Obrigações e Restrições</label>
-    <p-editor v-model="deus.obrigacoesRestricoes" />
+    <p-editor v-model="divindade.obrigacoesRestricoes" />
   </div>
   <div>
     <label>Poderes Concedidos</label>
-    <p-editor v-model="deus.poderesConcedidos" />
+    <p-editor v-model="divindade.poderesConcedidos" />
   </div>
   <p-button
     label="Finalizar"

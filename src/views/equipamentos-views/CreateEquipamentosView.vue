@@ -409,15 +409,6 @@ const handleRegister = () => {
       :min="-99"
       :max="0"
     />
-    <label for="escudo-peso">Peso</label>
-    <p-input-number 
-      id="escudo-peso"
-      v-model="escudo.peso"
-      suffix=" kg"
-      placeholder="-"
-      :minFractionDigits="1"
-      :maxFractionDigits="1"
-    />
   </div>
   <div v-if="equipamento.categoria === 'Itens e Serviços'">
     <label for="itens-classificacao">Classificação</label>

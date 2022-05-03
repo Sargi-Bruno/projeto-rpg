@@ -1,4 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { 
+  getAuth,
+  onAuthStateChanged,
+} from 'firebase/auth'
 import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
@@ -10,14 +14,31 @@ const router = createRouter({
       component: HomeView
     },
     {
+      path: '/personagens',
+      name: 'listar-personagens',
+      component: () => import('../views/personagens-views/ListPersonagensView.vue'),
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/criar-personagem/:id',
+      name: 'criar-personagem',
+      component: () => import('../views/personagens-views/CreatePersonagensView.vue'),
+      props: true,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
       path: '/criar-classe',
       name: 'criar-classe',
       component: () => import('../views/classes-views/CreateClassesView.vue')
     },
     {
-      path: '/criar-deus',
-      name: 'criar-deus',
-      component: () => import('../views/deuses-views/CreateDeusesView.vue')
+      path: '/criar-divindade',
+      name: 'criar-divindade',
+      component: () => import('../views/divindades-views/CreateDivindadesView.vue')
     },
     {
       path: '/criar-equipamento',
@@ -51,9 +72,9 @@ const router = createRouter({
       props: true
     },
     {
-      path: '/deus/:id',
-      name: 'detalhes-deus',
-      component: () => import('../views/deuses-views/DetailsDeusesView.vue'),
+      path: '/divindade/:id',
+      name: 'detalhes-divindade',
+      component: () => import('../views/divindades-views/DetailsDivindadesView.vue'),
       props: true
     },
     {
@@ -93,9 +114,9 @@ const router = createRouter({
       props: true
     },
     {
-      path: '/editar-deus/:id',
-      name: 'editar-deus',
-      component: () => import('../views/deuses-views/EditDeusesView.vue'),
+      path: '/editar-divindade/:id',
+      name: 'editar-divindade',
+      component: () => import('../views/divindades-views/EditDivindadesView.vue'),
       props: true
     },
     {
@@ -134,9 +155,9 @@ const router = createRouter({
       component: () => import('../views/classes-views/ListClassesView.vue')
     },
     {
-      path: '/deuses',
-      name: 'listar-deuses',
-      component: () => import('../views/deuses-views/ListDeusesView.vue')
+      path: '/divindades',
+      name: 'listar-divindades',
+      component: () => import('../views/divindades-views/ListDivindadesView.vue')
     },
     {
       path: '/equipamentos',
@@ -163,25 +184,42 @@ const router = createRouter({
       name: 'listar-racas',
       component: () => import('../views/racas-views/ListRacasView.vue')
     },
-
-    // {
-    //   path: '/jobs/:id',
-    //   name: 'jobDetails',
-    //   component: JobDetailsView,
-    //   props: true
-    // },
-    // // redirect 
-    // {
-    //   path: '/all-jobs',
-    //   redirect: '/jobs'
-    // },
-    // // catchall 404
-    // {
-    //   path: '/:catchAll(.*)',
-    //   name: 'notFound',
-    //   component: NotFoundView,
-    // },
+    {
+      path: '/login-necessario',
+      name: 'login-required',
+      component: () => import('../views/error-views/LoginRequiredView.vue')
+    },
+    {
+      path: '/:catchAll(.*)',
+      name: 'notFound',
+      component: () => import('../views/error-views/NotFoundView.vue')
+    },
   ]
+})
+
+const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const removeListener = onAuthStateChanged(
+      getAuth(), 
+      (user) => {
+        removeListener()
+        resolve(user)
+      },
+      reject
+    )
+  })
+}
+
+router.beforeEach(async (to, from, next) => {
+  if(to.matched.some(record => record.meta.requiresAuth)) {
+    if(await getCurrentUser()) {
+      next()
+    } else {
+      next({name: 'login-required'})
+    }
+  } else {
+    next()
+  }
 })
 
 export default router

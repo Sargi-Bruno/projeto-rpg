@@ -1,4 +1,5 @@
-import { initializeApp } from 'firebase/app'
+// import { initializeApp } from 'firebase/app'
+// import { getAuth } from 'firebase/auth'
 import { 
     getFirestore,
     collection,
@@ -11,16 +12,20 @@ import {
     serverTimestamp,
 } from 'firebase/firestore'
 
-const firebaseConfig = {
-    apiKey: "AIzaSyDzhifEXXAAo0hNdghzuTZiOSDtp_MttWU",
-    authDomain: "projeto-rpg-f1c50.firebaseapp.com",
-    projectId: "projeto-rpg-f1c50",
-    storageBucket: "projeto-rpg-f1c50.appspot.com",
-    messagingSenderId: "851387745048",
-    appId: "1:851387745048:web:da1ffb95ae0a5871b6546d"
-  }
+// const firebaseConfig = {
+//     apiKey: "AIzaSyDzhifEXXAAo0hNdghzuTZiOSDtp_MttWU",
+//     authDomain: "projeto-rpg-f1c50.firebaseapp.com",
+//     projectId: "projeto-rpg-f1c50",
+//     storageBucket: "projeto-rpg-f1c50.appspot.com",
+//     messagingSenderId: "851387745048",
+//     appId: "1:851387745048:web:da1ffb95ae0a5871b6546d"
+//   }
 
-initializeApp(firebaseConfig)
+// initializeApp(firebaseConfig)
+
+// const auth = getAuth()
+
+// export { auth }
 
 export const firestore = getFirestore()
 
@@ -31,11 +36,9 @@ export const _addDoc = async (collectionName, doc) => {
     doc.collectionName = collectionName
     // doc.timestamp = Date.now()
 
-    addDoc(collection(firestore, collectionName), doc)
-        .then(doc => {
-            return doc.id
-        })
-        .catch(err => console.log(err.message))
+    const data = await addDoc(collection(firestore, collectionName), doc)
+
+    return data.id
 }
 
 export const _getDoc = async (collectionName, id) => {
@@ -70,4 +73,14 @@ export const _updateDoc = async (data) => {
 export const _deleteDoc = async (data) => {
     deleteDoc(doc(firestore, data.collectionName, data.id))
         .catch(err => console.log(err.message))
+}
+
+export const createPersonagem = async (data, uid) => {
+    data.timestamp = serverTimestamp()
+    data.collectionName = 'personagens'
+    data.uid = uid
+
+    const doc = await addDoc(collection(firestore, 'personagens'), data)
+
+    return doc.id
 }

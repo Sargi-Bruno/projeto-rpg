@@ -3,28 +3,28 @@ import { onMounted, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import { _getDocs } from '../../firebase/firestore'
 
-const deuses = ref([])
+const divindades = ref([])
 
 onMounted(async () => {
-  deuses.value = await _getDocs('deuses')
+  divindades.value = await _getDocs('divindades')
 })
 </script>
 
 <template>
-  <h1>Listar Deuses</h1>
-  <RouterLink :to="{ name: 'criar-deus' }">
-    Cadastrar novo Deus
+  <h1>Listar Divindades</h1>
+  <RouterLink :to="{ name: 'criar-divindade' }">
+    Cadastrar novo Divindade
   </RouterLink>
-  <div v-for="deus in deuses" :key="deus.id">
+  <div v-for="divindade in divindades" :key="divindade.id">
     <p-card>
       <template #title>
-        {{deus.nome}}
+        {{divindade.nome}}
       </template>
       <template #content>
-        <div v-html="deus.descricao"></div>
+        <div v-html="divindade.descricao"></div>
       </template>
       <template #footer>
-        <RouterLink :to="{ name: 'detalhes-deus', params: { id: deus.id } }">
+        <RouterLink :to="{ name: 'detalhes-divindade', params: { id: divindade.id } }">
           Ver mais
         </RouterLink>
       </template>
