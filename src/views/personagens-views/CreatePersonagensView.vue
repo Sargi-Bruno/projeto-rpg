@@ -50,13 +50,13 @@ const handleNextStep = (nextStep) => {
     <p-select-button
       v-model="currentStep"
       :options="setepperOptions"
-      optionLabel="label"
-      optionValue="value"
+      option-label="label"
+      option-value="value"
     />
     <component 
       :is="componentOptions[currentStep]" 
-      :personagemId="personagemId"
-      @handleNextStep="handleNextStep"
+      :personagem-id="personagemId"
+      @handle-next-step="handleNextStep"
     />
   </div>
 </template>

@@ -15,13 +15,16 @@ onMounted(async () => {
   <RouterLink :to="{ name: 'criar-poder-geral' }">
     Cadastrar novo Poder Geral
   </RouterLink>
-  <div v-for="poderGeral in poderesGerais" :key="poderGeral.id">
+  <div
+    v-for="poderGeral in poderesGerais"
+    :key="poderGeral.id"
+  >
     <p-card>
       <template #title>
-        {{poderGeral.nome}}
+        {{ poderGeral.nome }}
       </template>
       <template #content>
-        <div v-html="poderGeral.descricao"></div>
+        <div v-html="poderGeral.descricao" />
       </template>
       <template #footer>
         <RouterLink :to="{ name: 'detalhes-poder-geral', params: { id: poderGeral.id } }">

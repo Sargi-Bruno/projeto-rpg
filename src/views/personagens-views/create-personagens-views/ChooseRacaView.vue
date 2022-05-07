@@ -3,10 +3,13 @@ import { onMounted, ref } from 'vue'
 import { _getDocs, _getDoc, _updateDoc } from '../../../firebase/firestore'
 
 const props = defineProps({
-  personagemId: String
+  personagemId: {
+    type: String,
+    required: true
+  }
 })
 
-const emit = defineEmits(['handleNextStep'])
+const emit = defineEmits(['handle-next-step'])
 
 const atributosOptions = [
   {label: 'Força', value: 'forca'},
@@ -49,20 +52,23 @@ const handleChangeRaca = () => {
 
 const handleSavePersonagem = async () => {
   _updateDoc(personagem.value)
-    .then(emit('handleNextStep', 1))
+    .then(emit('handle-next-step', 1))
 }
 </script>
 
 <template>
   <h1>Escolher Raça</h1>
   <div v-if="!isRacaChosen">
-    <div v-for="raca in racas" :key="raca.id">
+    <div
+      v-for="raca in racas"
+      :key="raca.id"
+    >
       <p-card>
         <template #title>
-          {{raca.nome}}
+          {{ raca.nome }}
         </template>
         <template #content>
-          <div v-html="raca.descricao"></div>
+          <div v-html="raca.descricao" />
         </template>
         <template #footer>
           <p-button
@@ -81,10 +87,10 @@ const handleSavePersonagem = async () => {
     <div>
       <p-card>
         <template #title>
-          {{personagem.raca.nome}}
+          {{ personagem.raca.nome }}
         </template>
         <template #content>
-          <div v-html="personagem.raca.descricao"></div>
+          <div v-html="personagem.raca.descricao" />
         </template>
       </p-card>
       <div v-if="personagem.raca.tipoAtributos === 'fixo'">
@@ -94,16 +100,16 @@ const handleSavePersonagem = async () => {
         <h3>
           +2 em três atributos diferentes 
           <span v-if="personagem.raca.excecaoAtributo">
-            (Exceto {{personagem.raca.excecaoAtributo}}), {{personagem.raca.excecaoAtributo}} -2. 
+            (Exceto {{ personagem.raca.excecaoAtributo }}), {{ personagem.raca.excecaoAtributo }} -2. 
           </span>
         </h3>
         <p-select-button
           v-model="personagem.raca.atributosDinamicoEscolhidos"
-          @click="handleAtributosDinamico"
           :options="atributosOptions"
-          optionLabel="label"
-          optionValue="value"
+          option-label="label"
+          option-value="value"
           multiple
+          @click="handleAtributosDinamico"
         />  
       </div>
       <div v-if="personagem.raca.tipoAtributos === 'variante'">
@@ -112,7 +118,7 @@ const handleSavePersonagem = async () => {
           v-model="personagem.raca.varianteEscolhida"
           :options="personagem.raca.variantes"
         />
-        {{personagem.raca.varianteEscolhida}}
+        {{ personagem.raca.varianteEscolhida }}
       </div>
     </div>
     <p-button

@@ -272,7 +272,7 @@ const handleDelete = () => {
           v-model="arma.preco"
           prefix="T$ "
           placeholder="-"
-          :maxFractionDigits="1"
+          :max-fraction-digits="1"
         />
         <label>Dano</label>
         <label for="arma-dano-quantidade">Quantidade</label>
@@ -291,7 +291,7 @@ const handleDelete = () => {
         <p-input-number 
           id="arma-critico-margem-de-ameaca"
           v-model="arma.critico.margemDeAmeaca"
-          showButtons
+          show-buttons
           :min="1"
           :max="20"
         />
@@ -300,7 +300,7 @@ const handleDelete = () => {
           id="arma-critico-multiplicador"
           v-model="arma.critico.multiplicador"
           suffix=" x"
-          showButtons
+          show-buttons
           :min="2"
           :max="99"
         />
@@ -316,8 +316,8 @@ const handleDelete = () => {
           v-model="arma.peso"
           suffix=" kg"
           placeholder="-"
-          :minFractionDigits="1"
-          :maxFractionDigits="1"
+          :min-fraction-digits="1"
+          :max-fraction-digits="1"
         />
         <label for="arma-tipo">Tipo</label>
         <p-multi-select
@@ -345,13 +345,13 @@ const handleDelete = () => {
           v-model="armadura.preco"
           prefix="T$ "
           placeholder="-"
-          :maxFractionDigits="1"
+          :max-fraction-digits="1"
         />
         <label for="armadura-defesa">Bônus na Defesa</label>
         <p-input-number 
           id="armadura-defesa"
           v-model="armadura.defesa"
-          showButtons
+          show-buttons
           :min="1"
           :max="99"
         />
@@ -359,7 +359,7 @@ const handleDelete = () => {
         <p-input-number 
           id="armadura-penalidade"
           v-model="armadura.penalidade"
-          showButtons
+          show-buttons
           :min="-99"
           :max="0"
         />
@@ -369,8 +369,8 @@ const handleDelete = () => {
           v-model="armadura.peso"
           suffix=" kg"
           placeholder="-"
-          :minFractionDigits="1"
-          :maxFractionDigits="1"
+          :min-fraction-digits="1"
+          :max-fraction-digits="1"
         />
       </div>
       <div v-if="equipamento.categoria === 'Escudo'">
@@ -399,7 +399,7 @@ const handleDelete = () => {
           v-model="escudo.preco"
           prefix="T$ "
           placeholder="-"
-          :maxFractionDigits="1"
+          :max-fraction-digits="1"
         />
         <label>Dano</label>
         <label for="escudo-dano-quantidade">Quantidade</label>
@@ -418,7 +418,7 @@ const handleDelete = () => {
         <p-input-number 
           id="escudo-critico-margem-de-ameaca"
           v-model="escudo.critico.margemDeAmeaca"
-          showButtons
+          show-buttons
           :min="1"
           :max="20"
         />
@@ -427,7 +427,7 @@ const handleDelete = () => {
           id="escudo-critico-multiplicador"
           v-model="escudo.critico.multiplicador"
           suffix=" x"
-          showButtons
+          show-buttons
           :min="2"
           :max="99"
         />
@@ -443,8 +443,8 @@ const handleDelete = () => {
           v-model="escudo.peso"
           suffix=" kg"
           placeholder="-"
-          :minFractionDigits="1"
-          :maxFractionDigits="1"
+          :min-fraction-digits="1"
+          :max-fraction-digits="1"
         />
         <label for="escudo-tipo">Tipo</label>
         <p-multi-select
@@ -462,7 +462,7 @@ const handleDelete = () => {
         <p-input-number 
           id="escudo-defesa"
           v-model="escudo.defesa"
-          showButtons
+          show-buttons
           :min="1"
           :max="99"
         />
@@ -470,7 +470,7 @@ const handleDelete = () => {
         <p-input-number 
           id="escudo-penalidade"
           v-model="escudo.penalidade"
-          showButtons
+          show-buttons
           :min="-99"
           :max="0"
         />
@@ -480,8 +480,8 @@ const handleDelete = () => {
           v-model="escudo.peso"
           suffix=" kg"
           placeholder="-"
-          :minFractionDigits="1"
-          :maxFractionDigits="1"
+          :min-fraction-digits="1"
+          :max-fraction-digits="1"
         />
       </div>
       <div v-if="equipamento.categoria === 'Itens e Serviços'">
@@ -490,8 +490,8 @@ const handleDelete = () => {
           id="itens-classificacao"
           v-model="itens.classificacao"
           :options="classificacaoItensOptions"
-          optionLabel="label"
-          optionValue="label"
+          option-label="label"
+          option-value="label"
           :filter="true"
         />
         <label for="itens-preco">Preço</label>
@@ -500,7 +500,7 @@ const handleDelete = () => {
           v-model="itens.preco"
           prefix="T$ "
           placeholder="-"
-          :maxFractionDigits="1"
+          :max-fraction-digits="1"
         />
         <label for="itens-peso">Peso</label>
         <p-input-number 
@@ -508,8 +508,8 @@ const handleDelete = () => {
           v-model="itens.peso"
           suffix=" kg"
           placeholder="-"
-          :minFractionDigits="1"
-          :maxFractionDigits="1"
+          :min-fraction-digits="1"
+          :max-fraction-digits="1"
         />
       </div>
       <RouterLink :to="{ name: 'listar-equipamentos' }">
@@ -517,13 +517,13 @@ const handleDelete = () => {
       </RouterLink>
       <p-button
         label="Editar"
-        @click="handleEdit"
         :disabled="editLoading"
+        @click="handleEdit"
       />
       <p-button
         label="Deletar"
-        @click="handleDelete"
         :disabled="deleteLoading"
+        @click="handleDelete"
       />
     </div>
   </div>

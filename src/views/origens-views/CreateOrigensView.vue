@@ -54,7 +54,7 @@ const handleRegister = () => {
   </div>
   <p-button
     label="Finalizar"
-    @click="handleRegister"
     :disabled="registerLoading"
+    @click="handleRegister"
   />
 </template>

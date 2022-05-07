@@ -15,13 +15,16 @@ onMounted(async () => {
   <RouterLink :to="{ name: 'criar-raca' }">
     Cadastrar nova Raça
   </RouterLink>
-  <div v-for="raca in racas" :key="raca.id">
+  <div
+    v-for="raca in racas"
+    :key="raca.id"
+  >
     <p-card>
       <template #title>
-        {{raca.nome}}
+        {{ raca.nome }}
       </template>
       <template #content>
-        <div v-html="raca.descricao"></div>
+        <div v-html="raca.descricao" />
       </template>
       <template #footer>
         <RouterLink :to="{ name: 'detalhes-raca', params: { id: raca.id } }">

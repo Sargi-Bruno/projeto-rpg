@@ -20,10 +20,10 @@ onMounted(async () => {
       </RouterLink>
       <p-card>
         <template #title>
-          {{equipamento.nome}}
+          {{ equipamento.nome }}
         </template>
         <template #content>
-          <div v-html="equipamento.descricao"></div>
+          <div v-html="equipamento.descricao" />
         </template>
       </p-card>
     </div>

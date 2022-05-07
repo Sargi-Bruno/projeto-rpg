@@ -86,16 +86,16 @@ const handleDelete = () => {
           id="circulo"
           v-model="magia.circulo"
           :options="circuloOptions"
-          optionLabel="label"
-          optionValue="value"
+          option-label="label"
+          option-value="value"
         />
         <label for="escola">Escola</label>
         <p-dropdown 
           id="escola"
           v-model="magia.escola"
           :options="escolaOptions"
-          optionLabel="label"
-          optionValue="label"
+          option-label="label"
+          option-value="label"
           :filter="true"
         />
         <label for="execucao">Execução</label>
@@ -136,13 +136,13 @@ const handleDelete = () => {
       </RouterLink>
       <p-button
         label="Editar"
-        @click="handleEdit"
         :disabled="editLoading"
+        @click="handleEdit"
       />
       <p-button
         label="Deletar"
-        @click="handleDelete"
         :disabled="deleteLoading"
+        @click="handleDelete"
       />
     </div>
   </div>

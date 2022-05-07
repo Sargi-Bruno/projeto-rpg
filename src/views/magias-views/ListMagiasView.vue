@@ -15,13 +15,16 @@ onMounted(async () => {
   <RouterLink :to="{ name: 'criar-magia' }">
     Cadastrar nova Magia
   </RouterLink>
-  <div v-for="magia in magias" :key="magia.id">
+  <div
+    v-for="magia in magias"
+    :key="magia.id"
+  >
     <p-card>
       <template #title>
-        {{magia.nome}}
+        {{ magia.nome }}
       </template>
       <template #content>
-        <div v-html="magia.descricao"></div>
+        <div v-html="magia.descricao" />
       </template>
       <template #footer>
         <RouterLink :to="{ name: 'detalhes-magia', params: { id: magia.id } }">

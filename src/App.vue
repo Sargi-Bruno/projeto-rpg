@@ -51,11 +51,16 @@ const handleSignOut = () => {
 </script>
 
 <template>
-  <h1 class="title">Projeto RPG</h1>
+  <h1 class="title">
+    Projeto RPG
+  </h1>
   <p-menubar :model="items">
     <template #item="{item}">
-      <RouterLink :to="{ name: item.name }" class="p-menuitem-link">
-        {{item.label}}
+      <RouterLink
+        :to="{ name: item.name }"
+        class="p-menuitem-link"
+      >
+        {{ item.label }}
       </RouterLink>
     </template>
     <template #end>

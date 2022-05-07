@@ -3,10 +3,13 @@ import { onMounted, ref } from 'vue'
 import { _getDocs, _getDoc, _updateDoc } from '../../../firebase/firestore'
 
 const props = defineProps({
-  personagemId: String
+  personagemId: {
+    type: String,
+    required: true
+  }
 })
 
-const emit = defineEmits(['handleNextStep'])
+const emit = defineEmits(['handle-next-step'])
 
 const personagem = ref()
 const origens = ref([])
@@ -30,20 +33,23 @@ const handleChangeOrigem = () => {
 
 const handleSavePersonagem = async () => {
   _updateDoc(personagem.value)
-    .then(emit('handleNextStep', 3))
+    .then(emit('handle-next-step', 3))
 }
 </script>
 
 <template>
   <h1>Escolher Origem</h1>
   <div v-if="!isOrigemChosen">
-    <div v-for="origem in origens" :key="origem.id">
+    <div
+      v-for="origem in origens"
+      :key="origem.id"
+    >
       <p-card>
         <template #title>
-          {{origem.nome}}
+          {{ origem.nome }}
         </template>
         <template #content>
-          <div v-html="origem.descricao"></div>
+          <div v-html="origem.descricao" />
         </template>
         <template #footer>
           <p-button
@@ -62,10 +68,10 @@ const handleSavePersonagem = async () => {
     <div>
       <p-card>
         <template #title>
-          {{personagem.origem.nome}}
+          {{ personagem.origem.nome }}
         </template>
         <template #content>
-          <div v-html="personagem.origem.descricao"></div>
+          <div v-html="personagem.origem.descricao" />
         </template>
       </p-card>
     </div>

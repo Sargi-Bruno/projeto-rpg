@@ -15,13 +15,16 @@ onMounted(async () => {
   <RouterLink :to="{ name: 'criar-classe' }">
     Cadastrar nova Classe
   </RouterLink>
-  <div v-for="classe in classes" :key="classe.id">
+  <div 
+    v-for="classe in classes" 
+    :key="classe.id"
+  >
     <p-card>
       <template #title>
-        {{classe.nome}}
+        {{ classe.nome }}
       </template>
       <template #content>
-        <div v-html="classe.descricao"></div>
+        <div v-html="classe.descricao" />
       </template>
       <template #footer>
         <RouterLink :to="{ name: 'detalhes-classe', params: { id: classe.id } }">

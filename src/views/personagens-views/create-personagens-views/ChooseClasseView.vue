@@ -3,10 +3,13 @@ import { onMounted, ref } from 'vue'
 import { _getDocs, _getDoc, _updateDoc } from '../../../firebase/firestore'
 
 const props = defineProps({
-  personagemId: String
+  personagemId: {
+    type: String,
+    required: true
+  }
 })
 
-const emit = defineEmits(['handleNextStep'])
+const emit = defineEmits(['handle-next-step'])
 
 const personagem = ref()
 const classes = ref([])
@@ -30,20 +33,23 @@ const handleChangeClasse = () => {
 
 const handleSavePersonagem = async () => {
   _updateDoc(personagem.value)
-    .then(emit('handleNextStep', 2))
+    .then(emit('handle-next-step', 2))
 }
 </script>
 
 <template>
   <h1>Escolher Classe</h1>
   <div v-if="!isClasseChosen">
-    <div v-for="classe in classes" :key="classe.id">
+    <div
+      v-for="classe in classes"
+      :key="classe.id"
+    >
       <p-card>
         <template #title>
-          {{classe.nome}}
+          {{ classe.nome }}
         </template>
         <template #content>
-          <div v-html="classe.descricao"></div>
+          <div v-html="classe.descricao" />
         </template>
         <template #footer>
           <p-button
@@ -62,10 +68,10 @@ const handleSavePersonagem = async () => {
     <div>
       <p-card>
         <template #title>
-          {{personagem.classe.nome}}
+          {{ personagem.classe.nome }}
         </template>
         <template #content>
-          <div v-html="personagem.classe.descricao"></div>
+          <div v-html="personagem.classe.descricao" />
         </template>
       </p-card>
     </div>

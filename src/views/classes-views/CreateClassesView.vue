@@ -88,7 +88,7 @@ const magias = ref({
   nivelCirculo5: null,
   penalidadeArmaduraLeve: false,
 })
-const magiasAdicionadas = ref([])
+const magiasAdicionadasRef = ref([])
 
 const adicionarHabilidade = (habilidade) => {
   classe.value.habilidades.push({
@@ -117,18 +117,18 @@ const removerPoder = (index) => {
 
 const adicionarMagias = () => {
   if(magiasCaminhoSwitch.value) {
-    magiasAdicionadas.value.push({
+    magiasAdicionadasRef.value.push({
       ...magias.value,
       caminhoNome: magiasCaminhoNome.value
     })
   } else {
-    magiasAdicionadas.value = []
-    magiasAdicionadas.value.push({...magias.value})
+    magiasAdicionadasRef.value = []
+    magiasAdicionadasRef.value.push({...magias.value})
   }
 }
 
 const removerMagias = (index) => {
-  magiasAdicionadas.value.splice(index, 1)
+  magiasAdicionadasRef.value.splice(index, 1)
 }
 
 const handleRegister = () => {
@@ -136,7 +136,7 @@ const handleRegister = () => {
 
   classe.value.pericias = pericias.value
 
-  if(magiasAdicionadas.value.length > 0) classe.value.magias = magiasAdicionadas.value
+  if(magiasAdicionadasRef.value.length > 0) classe.value.magias = magiasAdicionadasRef.value
 
   _addDoc('classes', classe.value)
   router.push({ name: 'home' })
@@ -183,8 +183,8 @@ const handleRegister = () => {
       id="pericias-concedidas"
       v-model="pericias.concedidas"
       :options="periciasOptions"
-      optionLabel="label"
-      optionValue="label"
+      option-label="label"
+      option-value="label"
       :filter="true"
     />
     <label for="pericias-escolha1">Escolhas</label>
@@ -192,8 +192,8 @@ const handleRegister = () => {
       id="pericias-escolha1"
       v-model="pericias.escolha1"
       :options="periciasOptions"
-      optionLabel="label"
-      optionValue="label"
+      option-label="label"
+      option-value="label"
       :filter="true"
     />
     <label for="pericias-escolha2">ou</label>
@@ -201,8 +201,8 @@ const handleRegister = () => {
       id="pericias-escolha2"
       v-model="pericias.escolha2"
       :options="periciasOptions"
-      optionLabel="label"
-      optionValue="label"
+      option-label="label"
+      option-value="label"
       :filter="true"
     />
     <label for="pericias-quantidade">Quantidade que pode escolher</label>
@@ -217,21 +217,24 @@ const handleRegister = () => {
       id="pericias-opcoes"
       v-model="pericias.opcoes"
       :options="periciasOptions"
-      optionLabel="label"
-      optionValue="label"
+      option-label="label"
+      option-value="label"
       :filter="true"
     />
     <label for="proficiencias">Proficiências</label>
     <p-multi-select
       id="proficiencias"
-      placeholder="Nenhuma"
       v-model="classe.proficiencias"
+      placeholder="Nenhuma"
       :options="proficienciasOptions"
     />
     <h3>Tabela</h3>
     <p>Nível - Habilidade de Classe</p>
-    <div v-for="index in 20" :key="index">
-      <label :for="index + '-nivel'">{{index}}º</label>
+    <div
+      v-for="index in 20"
+      :key="index"
+    >
+      <label :for="index + '-nivel'">{{ index }}º</label>
       <p-input-text 
         :id="index + '-nivel'"
         v-model="classe.tabelaDeEvolucao[index-1]"
@@ -240,9 +243,12 @@ const handleRegister = () => {
   </div>
   <div>
     <h2>Habilidades de Classe</h2>
-    <div v-for="(habilidade, index) in classe.habilidades" :key="index">
-      <h3>{{habilidade.nome}}</h3>
-      <div v-html="habilidade.descricao"></div>
+    <div
+      v-for="(habilidade, index) in classe.habilidades"
+      :key="index"
+    >
+      <h3>{{ habilidade.nome }}</h3>
+      <div v-html="habilidade.descricao" />
       <p-button 
         label="Remover"
         @click="removerHabilidade(index)"
@@ -250,15 +256,22 @@ const handleRegister = () => {
     </div>
     <AdicionarHabilidade 
       classe
-      @adicionarHabilidade="adicionarHabilidade"
+      @adicionar-habilidade="adicionarHabilidade"
     />
   </div>
   <div>
-    <h2 v-if="classe.nome.length > 0">Poder de {{classe.nome}}</h2>
-    <h2 v-else>Poder de...</h2>
-    <div v-for="(poder, index) in classe.poderes" :key="index">
-      <h3>{{poder.nome}}</h3>
-      <div v-html="poder.descricao"></div>
+    <h2 v-if="classe.nome.length > 0">
+      Poder de {{ classe.nome }}
+    </h2>
+    <h2 v-else>
+      Poder de...
+    </h2>
+    <div
+      v-for="(poder, index) in classe.poderes"
+      :key="index"
+    >
+      <h3>{{ poder.nome }}</h3>
+      <div v-html="poder.descricao" />
       <p-button 
         label="Remover"
         @click="removerPoder(index)"
@@ -266,46 +279,49 @@ const handleRegister = () => {
     </div>
     <AdicionarHabilidade
       poder
-      @adicionarHabilidade="adicionarPoder"
+      @add-habilidade="adicionarPoder"
     />
   </div>
   <div>
-    <div v-for="(magias, index) in magiasAdicionadas" :key="index">
+    <div
+      v-for="(magiasAdicionadas, index) in magiasAdicionadasRef"
+      :key="index"
+    >
       <h2>Magias</h2>
-      <h3 v-if="magias.caminhoNome">
-        Caminho do {{magias.caminhoNome}}
+      <h3 v-if="magiasAdicionadas.caminhoNome">
+        Caminho do {{ magiasAdicionadas.caminhoNome }}
       </h3>
-      <p v-if="magias.escolherEscolas">
+      <p v-if="magiasAdicionadas.escolherEscolas">
         Escolhe três escolas de magia. Uma vez feita, essa escolha
         não pode ser mudada.
       </p>
-      <p>Pode lançar magias do tipo {{magias.tipoMagia}}.</p>
-      <p v-if="magias.nivelCirculo2">
-        Pode lançar magias do 2º círculo no nível {{magias.nivelCirculo2}}.
+      <p>Pode lançar magias do tipo {{ magiasAdicionadas.tipoMagia }}.</p>
+      <p v-if="magiasAdicionadas.nivelCirculo2">
+        Pode lançar magias do 2º círculo no nível {{ magiasAdicionadas.nivelCirculo2 }}.
       </p>
-      <p v-if="magias.nivelCirculo3">
-        Pode lançar magias do 3º círculo no nível {{magias.nivelCirculo3}}.
+      <p v-if="magiasAdicionadas.nivelCirculo3">
+        Pode lançar magias do 3º círculo no nível {{ magiasAdicionadas.nivelCirculo3 }}.
       </p>
-      <p v-if="magias.nivelCirculo4">
-        Pode lançar magias do 4º círculo no nível {{magias.nivelCirculo4}}.
+      <p v-if="magiasAdicionadas.nivelCirculo4">
+        Pode lançar magias do 4º círculo no nível {{ magiasAdicionadas.nivelCirculo4 }}.
       </p>
-      <p v-if="magias.nivelCirculo5">
-        Pode lançar magias do 5º círculo no nível {{magias.nivelCirculo5}}.
-      </p>
-      <p>
-        Você começa com {{magias.quantidadeInicial}} magias de 1º círculo<span v-if="magias.escolherEscolas"> que pertençam a essas escolas</span>.
+      <p v-if="magiasAdicionadas.nivelCirculo5">
+        Pode lançar magias do 5º círculo no nível {{ magiasAdicionadas.nivelCirculo5 }}.
       </p>
       <p>
-        A {{intervaloAprendizadoOptions[magias.intervaloAprendizado].label}},
-        aprende uma magia de qualquer cículo<span v-if="magias.escolherEscolas"> e escola</span> que possa lançar.
+        Você começa com {{ magiasAdicionadas.quantidadeInicial }} magias de 1º círculo<span v-if="magiasAdicionadas.escolherEscolas"> que pertençam a essas escolas</span>.
       </p>
-      <p v-if="magias.penalidadeArmaduraLeve">
+      <p>
+        A {{ intervaloAprendizadoOptions[magiasAdicionadas.intervaloAprendizado].label }},
+        aprende uma magia de qualquer cículo<span v-if="magiasAdicionadas.escolherEscolas"> e escola</span> que possa lançar.
+      </p>
+      <p v-if="magiasAdicionadas.penalidadeArmaduraLeve">
         Você pode lançar essas magias vestindo armaduras leves sem precisar
         de testes de Misticismo
       </p>
       <p>
-        Seu atributo-chave para lançar magias é {{magias.atributoChave}}
-        e você soma seu bônus de {{magias.atributoChave}} no seu
+        Seu atributo-chave para lançar magias é {{ magiasAdicionadas.atributoChave }}
+        e você soma seu bônus de {{ magiasAdicionadas.atributoChave }} no seu
         total de PM.
       </p>
       <p-button 
@@ -347,8 +363,8 @@ const handleRegister = () => {
       id="intervalo-aprendizado"
       v-model="magias.intervaloAprendizado"
       :options="intervaloAprendizadoOptions"
-      optionLabel="label"
-      optionValue="value"
+      option-label="label"
+      option-value="value"
     />
     <label for="atributo-chave">Atributo-Chave</label>
     <p-dropdown
@@ -394,7 +410,7 @@ const handleRegister = () => {
   </div>
   <p-button
     label="Finalizar"
-    @click="handleRegister"
     :disabled="registerLoading"
+    @click="handleRegister"
   />
 </template>

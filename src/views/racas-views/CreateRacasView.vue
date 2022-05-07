@@ -198,21 +198,30 @@ const handleRegister = () => {
     <h2>Modificadores de Atributo</h2>
     <div>
       <div v-if="raca.tipoAtributos !== '' && raca.tipoAtributos === 'fixo'">
-        <div v-for="(atributo, index) in exibirAtributosFixo" :key="index">
+        <div
+          v-for="(atributo, index) in exibirAtributosFixo"
+          :key="index"
+        >
           <div v-if="atributo[1] !== 0">
-            {{atributosDicionario[atributo[0]]}} {{atributo[1]}}
+            {{ atributosDicionario[atributo[0]] }} {{ atributo[1] }}
           </div>
         </div>
       </div>
       <div v-if="raca.tipoAtributos !== '' && raca.tipoAtributos === 'variante'">
-        <div v-for="(atributoSet, index) in exibirAtributosVariante" :key="index">
+        <div
+          v-for="(atributoSet, index) in exibirAtributosVariante"
+          :key="index"
+        >
           <div v-if="variantesNomeLista[index]">
-            {{variantesNomeLista[index]}}
+            {{ variantesNomeLista[index] }}
           </div>
           <div class="inline">
-            <div v-for="(atributo, index) in atributoSet" :key="index">
+            <div
+              v-for="(atributo, jontex) in atributoSet"
+              :key="jontex"
+            >
               <div v-if="atributo[1] !== 0">
-                {{atributosDicionario[atributo[0]]}} {{atributo[1]}}
+                {{ atributosDicionario[atributo[0]] }} {{ atributo[1] }}
               </div>
             </div>
           </div>
@@ -227,7 +236,7 @@ const handleRegister = () => {
           <h5>+2 em três atributos diferentes.</h5>
         </div>
         <div v-else>
-          <h5>+2 em três atributos diferentes (exceto {{excecaoAtributo}}), {{excecaoAtributo}} -2</h5>
+          <h5>+2 em três atributos diferentes (exceto {{ excecaoAtributo }}), {{ excecaoAtributo }} -2</h5>
         </div>
       </div>
     </div>
@@ -319,9 +328,12 @@ const handleRegister = () => {
   </div>
   <div>
     <h2>Habilidades de Raça</h2>
-    <div v-for="(habilidade, index) in raca.habilidades" :key="index">
-      <h3>{{habilidade.nome}}</h3>
-      <div v-html="habilidade.descricao"></div>
+    <div
+      v-for="(habilidade, index) in raca.habilidades"
+      :key="index"
+    >
+      <h3>{{ habilidade.nome }}</h3>
+      <div v-html="habilidade.descricao" />
       <p-button 
         label="Remover"
         @click="removerHabilidade(index)"
@@ -329,11 +341,11 @@ const handleRegister = () => {
     </div>
   </div>
   <AdicionarHabilidade 
-    @adicionarHabilidade="adicionarHabilidade"
+    @adicionar-habilidade="adicionarHabilidade"
   />
   <p-button
     label="Finalizar"
-    @click="handleRegister"
     :disabled="registerLoading"
+    @click="handleRegister"
   />
 </template>

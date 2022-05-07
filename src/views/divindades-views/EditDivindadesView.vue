@@ -82,13 +82,13 @@ const handleDelete = () => {
       </RouterLink>
       <p-button
         label="Editar"
-        @click="handleEdit"
         :disabled="editLoading"
+        @click="handleEdit"
       />
       <p-button
         label="Deletar"
-        @click="handleDelete"
         :disabled="deleteLoading"
+        @click="handleDelete"
       />
     </div>
   </div>
