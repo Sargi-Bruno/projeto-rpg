@@ -9,11 +9,16 @@ import InputText from 'primevue/inputtext'
 import InputNumber from 'primevue/inputnumber'
 import Dropdown from 'primevue/dropdown'
 import MultiSelect from 'primevue/multiselect'
-import SelectButton from 'primevue/selectbutton'
 import InputSwitch from 'primevue/inputswitch'
+import Checkbox from 'primevue/checkbox'
+import TabView from 'primevue/tabview'
+import TabPanel from 'primevue/tabpanel'
+import ScrollTop from 'primevue/scrolltop';
+import SelectButton from 'primevue/selectbutton';
+import ProgressSpinner from 'primevue/progressspinner';
 import Editor from 'primevue/editor'
-import Menubar from 'primevue/menubar'
-import Card from 'primevue/card'
+
+import { vfmPlugin } from 'vue-final-modal'
 
 import { initializeApp } from 'firebase/app'
 // import { createPinia } from 'pinia'
@@ -33,17 +38,21 @@ const app = createApp(App)
 
 app.use(router)
 app.use(PrimeVue)
+app.use(vfmPlugin)
 // app.use(createPinia())
 
-app.component('p-button', Button)
-app.component('p-input-text', InputText)
-app.component('p-input-number', InputNumber)
-app.component('p-dropdown', Dropdown)
-app.component('p-multi-select', MultiSelect)
-app.component('p-select-button', SelectButton)
-app.component('p-input-switch', InputSwitch)
-app.component('p-editor', Editor)
-app.component('p-menubar', Menubar)
-app.component('p-card', Card)
+app.component('PButton', Button)
+  .component('PInputText', InputText)
+  .component('PInputNumber', InputNumber)
+  .component('PDropdown', Dropdown)
+  .component('PMultiSelect', MultiSelect)
+  .component('PInputSwitch', InputSwitch)
+  .component('PCheckbox', Checkbox)
+  .component('PTabView', TabView)
+  .component('PTabPanel', TabPanel)
+  .component('PScrollTop', ScrollTop)
+  .component('PSelectButton', SelectButton)
+  .component('PProgressSpinner', ProgressSpinner)
+  .component('PEditor', Editor)
 
 app.mount('#app')

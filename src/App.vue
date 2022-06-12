@@ -1,84 +1,10 @@
 <script setup>
-import { onMounted, ref } from 'vue'
-import { RouterLink, RouterView } from 'vue-router'
-import { 
-    getAuth,
-    GoogleAuthProvider,
-    signInWithPopup,
-    onAuthStateChanged,
-    signOut 
-} from 'firebase/auth'
-
-const auth = getAuth()
-const items = [
-  {label: 'Início', name: 'home'},
-  {label: 'Raças', name: 'listar-racas'},
-  {label: 'Classes', name: 'listar-classes'},
-  {label: 'Origens', name: 'listar-origens'},
-  {label: 'Divindades', name: 'listar-divindades'},
-  {label: 'Poderes Gerais', name: 'listar-poderes-gerais'},
-  {label: 'Equipamentos', name: 'listar-equipamentos'},
-  {label: 'Magias', name: 'listar-magias'},
-  {label: 'Personagens', name: 'listar-personagens'},
-]
-const isLoggedIn = ref(false)
-
-onMounted(() => {
-  onAuthStateChanged(auth, (user) => {
-    if(user) isLoggedIn.value = true
-    else isLoggedIn.value = false
-  })
-})
-
-const handleSignIn = () => {
-  const provider = new GoogleAuthProvider()
-  signInWithPopup(getAuth(), provider)
-    .then(result => {
-      console.log(result.user)
-      // router.push('')
-    })
-    .catch(err => {
-      console.log(err)
-    })
-}
-
-const handleSignOut = () => {
-  signOut(auth)
-    .then(() => {
-      console.log('signOut')
-    })
-}
+import { RouterView } from 'vue-router'
+import NavbarViewVue from './components/NavbarView.vue';
 </script>
 
 <template>
-  <h1 class="title">
-    Projeto RPG
-  </h1>
-  <p-menubar :model="items">
-    <template #item="{item}">
-      <RouterLink
-        :to="{ name: item.name }"
-        class="p-menuitem-link"
-      >
-        {{ item.label }}
-      </RouterLink>
-    </template>
-    <template #end>
-      <div v-if="isLoggedIn === false">
-        <p-button 
-          label="Login"
-          @click="handleSignIn"
-        />
-      </div>
-      <div v-else>
-        <p-button 
-          label="Logout"
-          @click="handleSignOut"
-        />
-      </div>
-    </template>
-  </p-menubar>
-
+  <NavbarViewVue />
   <RouterView />
 </template>
 
@@ -87,8 +13,8 @@ const handleSignOut = () => {
 
 @import 'primevue/resources/primevue.min.css ';
 @import 'primeicons/primeicons.css';
-/* @import './assets/theme.css'; */
-@import 'primevue/resources/themes/md-light-indigo/theme.css';
+@import './assets/theme.css';
+/* @import 'primevue/resources/themes/saga-blue/theme.css'; */
 
 @font-face {
   font-family: 'Tormenta';
@@ -99,15 +25,33 @@ const handleSignOut = () => {
   box-sizing: border-box; 
 }
 
-body {
+:root {
+  --tormenta-red: #d13133;
+  --tormenta-dark-red: #b52d34;
+  --tormenta-background: #f4f3f2;
+}
+
+html, body {
   margin: 0;
-}
-
-#app {
+  padding: 0;
   font-family: 'Roboto', sans-serif;
+  background-color: #F5F5F5;
+  line-height: 1.6;
 }
 
-.title {
+.content {
+  width: 75rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.page-title {
   font-family: 'Tormenta', sans-serif;
+  color: var(--tormenta-red);
+}
+
+.p-inputnumber-input {
+  width: 6rem;
+  height: 2.5rem;
 }
 </style>
