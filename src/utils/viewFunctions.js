@@ -34,7 +34,7 @@ export const sortAtributos = (atributos) => {
   let atributosOrdem = []
 
   for(let atributo in atributos) {
-    atributosOrdem.push([atributo, atributos[atributo]])
+    if(atributos[atributo] !== 0) atributosOrdem.push([atributo, atributos[atributo]])
   }
 
   atributosOrdem.sort((a, b) => {
@@ -42,19 +42,17 @@ export const sortAtributos = (atributos) => {
   })
 
   atributosOrdem.forEach((atributo, index) => {
-    if(atributo[1] !== 0) {
-      if(index === atributosOrdem.length - 1) {
-        if(Math.sign(atributo[1]) === 1) {
-          stringReturn += `${atributosDicionario[atributo[0]]} +${atributo[1]}.`
-        } else {
-          stringReturn += `${atributosDicionario[atributo[0]]} ${atributo[1]}.`
-        }
+    if(index === atributosOrdem.length - 1) {
+      if(Math.sign(atributo[1]) === 1) {
+        stringReturn += `${atributosDicionario[atributo[0]]} +${atributo[1]}`
       } else {
-        if(Math.sign(atributo[1]) === 1) {
-          stringReturn += `${atributosDicionario[atributo[0]]} +${atributo[1]}, `
-        } else {
-          stringReturn += `${atributosDicionario[atributo[0]]} ${atributo[1]}, `
-        }
+        stringReturn += `${atributosDicionario[atributo[0]]} ${atributo[1]}`
+      }
+    } else {
+      if(Math.sign(atributo[1]) === 1) {
+        stringReturn += `${atributosDicionario[atributo[0]]} +${atributo[1]}, `
+      } else {
+        stringReturn += `${atributosDicionario[atributo[0]]} ${atributo[1]}, `
       }
     }
   })

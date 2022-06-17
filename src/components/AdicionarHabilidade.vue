@@ -39,35 +39,77 @@ const adicionarHabilidade = () => {
     <h2 v-else>
       Adicionar Habilidade
     </h2>
-    <label for="nome-habilidade">Nome</label>
-    <p-input-text 
-      id="nome-habilidade"
-      v-model="habilidade.nome"
-    />
-    <div v-if="classe">
-      <label for="nivel-concedido">Nível concedido</label>
-      <p-input-text 
-        id="nivel-concedido"
-        v-model="habilidade.nivelConcedido"
+    <div class="header">
+      <div class="input-container">
+        <label for="nome-habilidade">Nome</label>
+        <p-input-text 
+          id="nome-habilidade"
+          v-model="habilidade.nome"
+        />
+      </div>
+      <div class="switch-container">
+        <label
+          v-if="poder"
+          for="magica-switch"
+        >
+          Poder Mágico
+        </label>
+        <label
+          v-else
+          for="magica-switch"
+        >
+          Habilidade Mágica
+        </label>
+        <p-input-switch 
+          id="magica-switch"
+          v-model="habilidade.habilidadeMagica"
+        />
+      </div>
+      <div v-if="classe">
+        <label for="nivel-concedido">Nível concedido</label>
+        <p-input-text 
+          id="nivel-concedido"
+          v-model="habilidade.nivelConcedido"
+        />
+      </div>
+    </div>   
+    <div>
+      <label>Descrição</label>
+      <p-editor 
+        v-model="habilidade.descricao" 
+        editor-style="height: 10rem"
       />
-    </div>
-    <label
-      v-if="poder"
-      for="magica-switch"
-    >Poder Mágico</label>
-    <label
-      v-else
-      for="magica-switch"
-    >Habilidade Mágica</label>
-    <p-input-switch 
-      id="magica-switch"
-      v-model="habilidade.habilidadeMagica"
-    />
-    <label>Descrição</label>
-    <p-editor v-model="habilidade.descricao" />
+    </div> 
     <p-button 
       label="Adicionar"
+      class="adicionar-button"
       @click="adicionarHabilidade"
     />
   </div>
 </template>
+
+<style scoped>
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.input-container {
+  display: flex;
+  flex-direction: column;
+  width: 10rem;
+}
+.switch-container {
+  display: flex;
+  align-items: center;
+  margin-left: 1rem;
+}
+.switch-container label {
+  margin-right: 0.5rem;
+}
+.adicionar-button {
+  display: block;
+  margin-top: 1rem;
+  margin-left: auto;
+}
+</style>

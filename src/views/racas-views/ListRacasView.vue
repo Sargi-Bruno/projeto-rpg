@@ -1,5 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { _getDocs } from '../../firebase/firestore'
 import { 
   renderDescricao,
@@ -9,6 +10,7 @@ import {
 } from '@/utils/viewFunctions'
 import ModalHabilidadesVue from '../../components/ModalHabilidades.vue'
 
+const router = useRouter()
 const racas = ref([])
 const openHabilidadesModal = ref(false)
 const habilidadesModal = ref([])
@@ -31,7 +33,7 @@ onMounted(async () => {
       </h1>
       <p-button
         label="Cadastrar"
-        @click="$router.push({ name: 'criar-raca' })"
+        @click="router.push({ name: 'criar-raca' })"
       />
     </div>
     <div class="list-content">   
@@ -55,7 +57,7 @@ onMounted(async () => {
         <!-- Atributos -->
         <div v-if="raca.tipoAtributos === 'fixo'">
           <h4 class="card-atributos">
-            {{ sortAtributos(raca.atributos) }}
+            {{ sortAtributos(raca.atributos) }}.
           </h4>
         </div>
         <div v-if="raca.tipoAtributos === 'dinamico'">
@@ -66,7 +68,7 @@ onMounted(async () => {
           </div>
           <div v-else>
             <h4 class="card-atributos">
-              +2 em três atributos diferentes (exceto {{ raca.excecaoAtributo }}), {{ raca.excecaoAtributo }} -2
+              +2 em três atributos diferentes (exceto {{ raca.excecaoAtributo }}), {{ raca.excecaoAtributo }} -2.
             </h4>
           </div>
         </div>
@@ -90,7 +92,7 @@ onMounted(async () => {
           />
           <p-button
             label="Ver mais"
-            @click="$router.push({ name: 'detalhes-raca', params: { id: raca.id } })"
+            @click="router.push({ name: 'detalhes-raca', params: { id: raca.id } })"
           />
         </div>
       </div>
@@ -117,9 +119,9 @@ onMounted(async () => {
   align-items: center;
 }
 .list-content {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  column-gap: 1.5rem;
 }
 .card {
   display: flex;

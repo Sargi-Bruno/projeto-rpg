@@ -1,23 +1,10 @@
 <script setup>
 import { onMounted, ref } from 'vue'
-import { RouterLink, useRoute, useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { _getDoc, _updateDoc, _deleteDoc } from '../../firebase/firestore'
 import AdicionarHabilidade from '../../components/AdicionarHabilidade.vue'
+import { sortAtributos } from '@/utils/viewFunctions.js'
 
-const route = useRoute()
-const router = useRouter()
-const editLoading = ref(false)
-const deleteLoading = ref(false)
-const raca = ref()
-
-const atributosDicionario = {
-  forca: 'Força',
-  destreza: 'Destreza',
-  constituicao: 'Constituição',
-  inteligencia: 'Inteligência',
-  sabedoria: 'Sabedoria',
-  carisma: 'Carisma'
-}
 const tamanhoDropdownOptions = [
   'Minúsculo',
   'Pequeno',
@@ -46,57 +33,19 @@ const atributosDefault = {
   sabedoria: 0,
   carisma: 0
 }
+
+const route = useRoute()
+const router = useRouter()
+const editLoading = ref(false)
+const deleteLoading = ref(false)
 const atributosOptionSelected = ref('Modificadores fixos')
 const excecaoSwitch = ref(false)
 const varianteSwitch = ref(false)
 const excecaoAtributoField = ref('')
-const excecaoAtributo = ref()
 const atributosField = ref(atributosDefault)
-const atributosFixo = ref()
-const atributosVariante = ref([])
-const exibirAtributosFixo = ref()
-const exibirAtributosVariante = ref([])
-const varianteNome = ref('')
-const variantesNomeLista = ref([])
-
-onMounted(async () => {
-  raca.value = await _getDoc('racas', route.params.id)
-
-  if(raca.value.tipoAtributos === 'dinamico') {
-    excecaoAtributo.value = raca.value.excecaoAtributo
-
-  } else if(raca.value.tipoAtributos === 'fixo') {
-    let atributosOrdem = []
-
-    for(let atributo in raca.value.atributos) {
-      atributosOrdem.push([atributo, raca.value.atributos[atributo]])
-    }
-
-    atributosOrdem.sort((a, b) => {
-      return b[1] - a[1]
-    })
-
-    atributosFixo.value = raca.value.atributos
-    exibirAtributosFixo.value = atributosOrdem
-
-  } else {
-    raca.value.atributos.forEach((atributoSet, index) => {
-      let atributosOrdem = []
-
-      for(let atributo in atributoSet) {
-        atributosOrdem.push([atributo, atributoSet[atributo]])
-      }
-
-      atributosOrdem.sort((a, b) => {
-        return b[1] - a[1]
-      })
-
-      atributosVariante.value.push(atributoSet)
-      exibirAtributosVariante.value.push(atributosOrdem)
-      variantesNomeLista.value.push(raca.value.variantes[index])
-    })
-  }
-})
+const varianteNomeField = ref('')
+const adicionarNovaVariante = ref(false)
+const raca = ref()
 
 const adicionarHabilidade = (habilidade) => {
   raca.value.habilidades.push({
@@ -108,10 +57,11 @@ const adicionarHabilidade = (habilidade) => {
 
 const adicionarAtributosDinamico = () => {
   raca.value.tipoAtributos = 'dinamico'
+  raca.value.excecaoAtributo = ''
 
   if(excecaoSwitch.value) {
     if(excecaoAtributoField.value === '') return
-    excecaoAtributo.value = excecaoAtributoField.value
+    raca.value.excecaoAtributo = excecaoAtributoField.value
     excecaoAtributoField.value = ''
     excecaoSwitch.value = false
   }
@@ -135,33 +85,18 @@ const AdicionarAtributos = () => {
     sabedoria: atributosField.value.sabedoria || 0,
     carisma: atributosField.value.carisma || 0,
   }
-  let atributosOrdem = []
-  
-
-  for(let atributo in atributoSet) {
-    atributosOrdem.push([atributo, atributoSet[atributo]])
-  }
-
-  atributosOrdem.sort((a, b) => {
-    return b[1] - a[1]
-  })
 
   if(varianteSwitch.value) {
-    if(varianteNome.value === '') return
+    if(varianteNomeField.value === '') return
 
     raca.value.tipoAtributos = 'variante'
-    atributosVariante.value.push(atributoSet)
-    exibirAtributosVariante.value.push(atributosOrdem)
-    variantesNomeLista.value.push(varianteNome.value)
-    varianteNome.value = ''
+    raca.value.atributos.push(atributoSet)
+    raca.value.variantes.push(varianteNomeField.value)
+    varianteNomeField.value = ''
+
   } else {
     raca.value.tipoAtributos = 'fixo'
-    atributosFixo.value = atributoSet
-    exibirAtributosFixo.value = atributosOrdem
-
-    atributosVariante.value = []
-    exibirAtributosVariante.value = []
-    variantesNomeLista.value = []
+    raca.value.atributos = atributoSet
   }
 
   atributosField.value.forca = 0
@@ -170,32 +105,45 @@ const AdicionarAtributos = () => {
   atributosField.value.inteligencia = 0
   atributosField.value.sabedoria = 0
   atributosField.value.carisma = 0
+
+  adicionarNovaVariante.value = false
 }
 
 const removerVariante = (index) => {
-  atributosVariante.value.splice(index, 1)
-  exibirAtributosVariante.value.splice(index, 1)
-  variantesNomeLista.value.splice(index, 1)
+  raca.value.atributos.splice(index, 1)
+  raca.value.variantes.splice(index, 1)
 }
 
 const removerHabilidade = (index) => {
   raca.value.habilidades.splice(index, 1)
 }
 
+const clearAtributos = () => {
+  raca.value.tipoAtributos = ''
+  raca.value.atributos = []
+  raca.value.excecaoAtributo = ''
+  raca.value.variantes = []
+}
+
 const handleEdit = () => {
+  if(raca.value.nome === '') return
+  if(raca.value.deslocamento === null || raca.value.deslocamento > 999) return
+  if(raca.value.tipoAtributos === '') return
+
   editLoading.value = true
 
   if(raca.value.tipoAtributos === 'fixo') {
-    raca.value.atributos = atributosFixo.value
+    raca.value.excecaoAtributo = ''
+    raca.value.variantes = []
 
   } else if(raca.value.tipoAtributos === 'variante') {
-    raca.value.atributos = atributosVariante.value
-    raca.value.variantes = variantesNomeLista.value
+    raca.value.excecaoAtributo = ''
 
   } else {
-    if(excecaoAtributo.value) raca.value.excecaoAtributo = excecaoAtributo.value
+    raca.value.atributos = []
+    raca.value.variantes = []
   }
-  
+    
   _updateDoc(raca.value)
   router.push({ name: 'listar-racas' })
 }
@@ -205,196 +153,494 @@ const handleDelete = () => {
   _deleteDoc(raca.value)
   router.push({ name: 'listar-racas' })
 }
+
+onMounted(async () => {
+  raca.value = await _getDoc('racas', route.params.id)
+})
 </script>
 
 <template>
-  <div>
-    <h1>Editar Raça</h1>
+  <div class="content">
+    <h1 class="page-title">
+      Editar Raça
+    </h1>
     <div v-if="raca">
-      <div>
-        <label for="nome-raca">Nome</label>
-        <p-input-text 
-          id="nome-raca"
-          v-model="raca.nome"
-        />
-        <label for="tamanho">Tamanho</label>
-        <p-dropdown 
-          id="tamanho"
-          v-model="raca.tamanho"
-          :options="tamanhoDropdownOptions"
-        />
-        <label for="deslocamento">Deslocamento em metros</label>
-        <p-input-number 
-          id="deslocamento"
-          v-model="raca.deslocamento"
-          :min="0"
-          :max="99"
-        />
-        <label>Descrição</label>
-        <p-editor v-model="raca.descricao" />
-      </div>
-      <div>
-        <h2>Modificadores de Atributo</h2>
-        <div>
-          <div v-if="raca.tipoAtributos !== '' && raca.tipoAtributos === 'fixo'">
-            <div
-              v-for="(atributo, index) in exibirAtributosFixo"
-              :key="index"
-            >
-              <div v-if="atributo[1] !== 0">
-                {{ atributosDicionario[atributo[0]] }} {{ atributo[1] }}
-              </div>
+      <div class="first-container">
+        <div class="caracteristicas-container">
+          <!-- Características da Raça -->
+          <h3>Características da Raça</h3>
+          <div class="row">
+            <div class="input-container">
+              <label for="nome-raca">Nome</label>
+              <p-input-text 
+                id="nome-raca"
+                v-model="raca.nome"
+                class="input-field"
+              />
+            </div>
+            <div class="input-container">
+              <label for="tamanho">Tamanho</label>
+              <p-dropdown 
+                id="tamanho"
+                v-model="raca.tamanho"
+                :options="tamanhoDropdownOptions"
+                class="input-field"
+              />
+            </div>
+            <div class="input-container">
+              <label for="deslocamento">Deslocamento</label>
+              <div>
+                <p-input-number 
+                  id="deslocamento"
+                  v-model="raca.deslocamento"
+                  :min="0"
+                  :max="99"
+                  suffix="m"
+                />
+              </div> 
             </div>
           </div>
-          <div v-if="raca.tipoAtributos !== '' && raca.tipoAtributos === 'variante'">
-            <div
-              v-for="(atributoSet, index) in exibirAtributosVariante"
-              :key="index"
-            >
-              <div v-if="variantesNomeLista[index]">
-                {{ variantesNomeLista[index] }}
+          <div>
+            <label>Descrição</label>
+            <p-editor 
+              v-model="raca.descricao" 
+              editor-style="height: 10rem" 
+            />
+          </div>
+        </div>
+        <div class="modificadores-container">
+          <!-- Atributos -->
+          <h3>Modificadores de Atributo</h3>
+          <div v-if="raca.tipoAtributos !== ''">
+            <!-- Fixo -->
+            <div v-if="raca.tipoAtributos === 'fixo'">
+              {{ sortAtributos(raca.atributos) }}.
+            </div>
+            <!-- Variante -->
+            <div v-if="raca.tipoAtributos === 'variante'">
+              <p-button 
+                label="Adicionar Variante"
+                class="atributos-variante-add-button"
+                @click="adicionarNovaVariante = true"
+              />
+              <div v-if="adicionarNovaVariante">
+                <div class="input-container">
+                  <label for="nome-variante">Nome</label>
+                  <p-input-text 
+                    id="nome-variante"
+                    v-model="varianteNomeField"
+                    :disabled="!varianteSwitch"
+                  />
+                </div>
+                <div class="atributos-container">
+                  <div class="row">
+                    <div class="input-container">
+                      <label for="forca">Força</label>
+                      <div>
+                        <p-input-number 
+                          id="forca"
+                          v-model="atributosField.forca"
+                          :min="-99"
+                          :max="99"
+                        />
+                      </div>
+                    </div>
+                    <div class="input-container">
+                      <label for="destreza">Destreza</label>
+                      <div>
+                        <p-input-number 
+                          id="destreza"
+                          v-model="atributosField.destreza"
+                          :min="-99"
+                          :max="99"
+                        />
+                      </div>
+                    </div>
+                    <div class="input-container">
+                      <label for="constituicao">Constituição</label>
+                      <div>
+                        <p-input-number 
+                          id="constituicao"
+                          v-model="atributosField.constituicao"
+                          :min="-99"
+                          :max="99"
+                        />
+                      </div>
+                    </div>
+                    <div class="input-container">
+                      <label for="inteligencia">Inteligência</label>
+                      <div>
+                        <p-input-number 
+                          id="inteligencia"
+                          v-model="atributosField.inteligencia"
+                          :min="-99"
+                          :max="99"
+                        />
+                      </div>
+                    </div>
+                    <div class="input-container">
+                      <label for="sabedoria">Sabedoria</label>
+                      <div>
+                        <p-input-number 
+                          id="sabedoria"
+                          v-model="atributosField.sabedoria"
+                          :min="-99"
+                          :max="99"
+                        />
+                      </div>
+                    </div>
+                    <div class="input-container">
+                      <label for="carisma">Carisma</label>
+                      <div>
+                        <p-input-number 
+                          id="carisma"
+                          v-model="atributosField.carisma"
+                          :min="-99"
+                          :max="99"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <p-button
+                  label="Adicionar"
+                  class="variante-button"
+                  @click="AdicionarAtributos"
+                />
+                <p-button
+                  label="Cancelar"
+                  class="variante-cancel-button"
+                  @click="adicionarNovaVariante = false"
+                />
               </div>
-              <div class="inline">
-                <div
-                  v-for="(atributo, jontex) in atributoSet"
-                  :key="jontex"
-                >
-                  <div v-if="atributo[1] !== 0">
-                    {{ atributosDicionario[atributo[0]] }} {{ atributo[1] }}
+              <div
+                v-for="(atributoSet, index) in raca.atributos"
+                :key="index"
+                class="atributos-variante-container"
+              >
+                <div>
+                  {{ sortAtributos(atributoSet) }} ({{ raca.variantes[index] }});
+                </div>
+                <p-button
+                  label="Remover"
+                  @click="removerVariante(index)"
+                />
+              </div>
+            </div>
+            <!-- Dinâmico -->
+            <div v-if="raca.tipoAtributos === 'dinamico'">
+              <div v-if="raca.excecaoAtributo === ''">
+                +2 em três atributos diferentes.
+              </div>
+              <div v-else>
+                +2 em três atributos diferentes (exceto {{ raca.excecaoAtributo }}), {{ raca.excecaoAtributo }} -2.
+              </div>
+            </div>
+            <p-button
+              label="Editar"
+              class="atributos-editar-button"
+              @click="clearAtributos"
+            />
+          </div>
+          <!-- Atributos cadastro -->
+          <div v-else>
+            <label for="tipo-atributo">
+              Tipo
+            </label>
+            <p-select-button 
+              id="tipo-atributo"
+              v-model="atributosOptionSelected"
+              :options="atributosButtonOptions"
+            />
+            <div 
+              v-if="atributosOptionSelected === 'Modificadores fixos'" 
+              class="atributos-container" 
+            >
+              <div class="row">
+                <div class="input-container">
+                  <label for="forca">Força</label>
+                  <div>
+                    <p-input-number 
+                      id="forca"
+                      v-model="atributosField.forca"
+                      :min="-99"
+                      :max="99"
+                    />
+                  </div>
+                </div>
+                <div class="input-container">
+                  <label for="destreza">Destreza</label>
+                  <div>
+                    <p-input-number 
+                      id="destreza"
+                      v-model="atributosField.destreza"
+                      :min="-99"
+                      :max="99"
+                    />
+                  </div>
+                </div>
+                <div class="input-container">
+                  <label for="constituicao">Constituição</label>
+                  <div>
+                    <p-input-number 
+                      id="constituicao"
+                      v-model="atributosField.constituicao"
+                      :min="-99"
+                      :max="99"
+                    />
+                  </div>
+                </div>
+                <div class="input-container">
+                  <label for="inteligencia">Inteligência</label>
+                  <div>
+                    <p-input-number 
+                      id="inteligencia"
+                      v-model="atributosField.inteligencia"
+                      :min="-99"
+                      :max="99"
+                    />
+                  </div>
+                </div>
+                <div class="input-container">
+                  <label for="sabedoria">Sabedoria</label>
+                  <div>
+                    <p-input-number 
+                      id="sabedoria"
+                      v-model="atributosField.sabedoria"
+                      :min="-99"
+                      :max="99"
+                    />
+                  </div>
+                </div>
+                <div class="input-container">
+                  <label for="carisma">Carisma</label>
+                  <div>
+                    <p-input-number 
+                      id="carisma"
+                      v-model="atributosField.carisma"
+                      :min="-99"
+                      :max="99"
+                    />
                   </div>
                 </div>
               </div>
-              <p-button
+              <div>
+                <div class="switch-container">
+                  <label for="variante-switch">Possui variante?</label>
+                  <p-input-switch 
+                    id="variante-switch"
+                    v-model="varianteSwitch"
+                  />
+                </div>
+                <div v-if="varianteSwitch">
+                  <div class="variante-form">
+                    <div class="input-container">
+                      <label for="nome-variante">Nome</label>
+                      <p-input-text 
+                        id="nome-variante"
+                        v-model="varianteNomeField"
+                        :disabled="!varianteSwitch"
+                      />
+                    </div>
+                    <p-button
+                      label="Adicionar"
+                      class="variante-button"
+                      @click="AdicionarAtributos"
+                    />
+                  </div>
+                </div>
+                <div v-else>
+                  <p-button
+                    label="Confirmar"
+                    @click="AdicionarAtributos"
+                  />
+                </div>
+              </div>
+            </div>
+            <div 
+              v-else 
+              class="atributos-container"
+            >
+              <div class="switch-container">
+                <label for="excecao-switch">Exceção</label>
+                <p-input-switch 
+                  id="excecao-switch"
+                  v-model="excecaoSwitch"
+                />
+              </div>
+              <div class="variante-form">
+                <div v-if="excecaoSwitch">
+                  <div class="input-container">
+                    <label for="excecao-atributo">Atributo</label>
+                    <p-dropdown 
+                      id="excecao-atributo"
+                      v-model="excecaoAtributoField"
+                      :options="excecaoDropdownOptions"
+                      :disabled="!excecaoSwitch"
+                      class="input-field"
+                    />
+                  </div>
+                </div>
+                <p-button 
+                  label="Confirmar"
+                  class="variante-button"
+                  @click="adicionarAtributosDinamico"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Habilidades de Raça -->
+      <div class="habilidades-container">
+        <div class="adicionar-habilidade-container">
+          <AdicionarHabilidade 
+            @adicionar-habilidade="adicionarHabilidade"
+          />
+        </div>
+        <div class="habilidades-adicionadas-container">
+          <h2>Habilidades de Raça</h2>
+          <div class="habilidades-adicionadas-content">
+            <div
+              v-for="(habilidade, index) in raca.habilidades"
+              :key="index"
+              class="habilidade-card"
+            >
+              <h4>{{ habilidade.nome }}</h4>
+              <p-button 
                 label="Remover"
-                @click="removerVariante(index)"
+                @click="removerHabilidade(index)"
               />
             </div>
           </div>
-          <div v-if="raca.tipoAtributos !== '' && raca.tipoAtributos === 'dinamico'">
-            <div v-if="!excecaoAtributo">
-              <h5>+2 em três atributos diferentes.</h5>
-            </div>
-            <div v-else>
-              <h5>+2 em três atributos diferentes (exceto {{ excecaoAtributo }}), {{ excecaoAtributo }} -2</h5>
-            </div>
-          </div>
         </div>
-        <p-select-button 
-          v-model="atributosOptionSelected"
-          :options="atributosButtonOptions"
+      </div>
+      <div class="footer">
+        <p-button
+          label="Deletar"
+          class="p-button-text p-button-danger"
+          :disabled="deleteLoading"
+          @click="handleDelete"
         />
-        <div v-if="atributosOptionSelected === 'Modificadores fixos'">
-          <div>
-            <label for="forca">Força</label>
-            <p-input-number 
-              id="forca"
-              v-model="atributosField.forca"
-              :min="-99"
-              :max="99"
-            />
-            <label for="destreza">Destreza</label>
-            <p-input-number 
-              id="destreza"
-              v-model="atributosField.destreza"
-              :min="-99"
-              :max="99"
-            />
-            <label for="constituicao">Constituição</label>
-            <p-input-number 
-              id="constituicao"
-              v-model="atributosField.constituicao"
-              :min="-99"
-              :max="99"
-            />
-            <label for="inteligencia">Inteligência</label>
-            <p-input-number 
-              id="inteligencia"
-              v-model="atributosField.inteligencia"
-              :min="-99"
-              :max="99"
-            />
-            <label for="sabedoria">Sabedoria</label>
-            <p-input-number 
-              id="sabedoria"
-              v-model="atributosField.sabedoria"
-              :min="-99"
-              :max="99"
-            />
-            <label for="carisma">Carisma</label>
-            <p-input-number 
-              id="carisma"
-              v-model="atributosField.carisma"
-              :min="-99"
-              :max="99"
-            />
-          </div>
-          <div>
-            <p-button
-              label="Confirmar"
-              @click="AdicionarAtributos"
-            />
-            <label for="variante-switch">Possui variante?</label>
-            <p-input-switch 
-              id="variante-switch"
-              v-model="varianteSwitch"
-            />
-            <label for="nome-variante">Nome</label>
-            <p-input-text 
-              id="nome-variante"
-              v-model="varianteNome"
-              :disabled="!varianteSwitch"
-            />
-          </div>
-        </div>
-        <div v-else>
-          <p-button 
-            label="Confirmar"
-            @click="adicionarAtributosDinamico"
-          />
-          <label for="excecao-switch">Exceção</label>
-          <p-input-switch 
-            id="excecao-switch"
-            v-model="excecaoSwitch"
-          />
-          <label for="excecao-atributo">Atributo</label>
-          <p-dropdown 
-            id="excecao-atributo"
-            v-model="excecaoAtributoField"
-            :options="excecaoDropdownOptions"
-            :disabled="!excecaoSwitch"
-          />
-        </div>
+        <p-button
+          label="Cancelar"
+          class="p-button-outlined"
+          @click="router.push({ name: 'listar-racas' })"
+        />
+        <p-button
+          label="Editar"
+          class="p-button-success"
+          :disabled="editLoading"
+          @click="handleEdit"
+        />
       </div>
-      <div>
-        <h2>Habilidades de Raça</h2>
-        <div
-          v-for="(habilidade, index) in raca.habilidades"
-          :key="index"
-        >
-          <h3>{{ habilidade.nome }}</h3>
-          <div v-html="habilidade.descricao" />
-          <p-button 
-            label="Remover"
-            @click="removerHabilidade(index)"
-          />
-        </div>
-      </div>
-      <AdicionarHabilidade 
-        @adicionar-habilidade="adicionarHabilidade"
-      />
-      <RouterLink :to="{ name: 'listar-racas' }">
-        Cancelar
-      </RouterLink>
-      <p-button
-        label="Editar"
-        :disabled="editLoading"
-        @click="handleEdit"
-      />
-      <p-button
-        label="Deletar"
-        :disabled="deleteLoading"
-        @click="handleDelete"
-      />
     </div>
   </div>
 </template>
+
+<style scoped>
+.first-container {
+  display: flex;
+}
+.caracteristicas-container {
+  width: 45%;
+  padding-right: 1rem;
+}
+.modificadores-container {
+  width: 55%;
+}
+.row {
+  display: flex;
+  margin-bottom: 1rem;
+}
+.input-container {
+  display: flex;
+  flex-direction: column;
+  margin-right: 1rem;
+}
+.input-field {
+  width: 10rem;
+  height: 2.5rem;
+}
+.input-field-lg {
+  width: 20rem;
+  height: 2.5rem;
+}
+.atributos-container {
+  margin-top: 1rem;
+}
+.switch-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.switch-container label {
+  margin-right: 1rem;
+}
+.variante-form {
+  display: flex;
+  align-items: flex-end;
+}
+.variante-button {
+  height: 2.5rem;
+}
+.atributos-variante-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.atributos-variante-add-button {
+  margin-bottom: 1rem;
+}
+.atributos-editar-button {
+  margin-top: 1rem;
+}
+.variante-cancel-button {
+  margin-left: 1rem;
+}
+.finish-button {
+  display: block;
+  margin-left: auto;
+  margin-bottom: 2rem;
+}
+.habilidades-container {
+  display: flex;
+}
+.adicionar-habilidade-container {
+  width: 45%;
+  padding-right: 1rem;
+}
+.habilidades-adicionadas-container {
+  width: 55%;
+}
+.habilidade-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  box-shadow: 0 5px 10px rgb(0 0 0 / 12%);
+  border-radius: 4px;
+  background-color: var(--tormenta-background);
+}
+.habilidade-card h4 {
+  margin: 0;
+  font-family: 'Tormenta', sans-serif;
+  font-size: 24px;
+  color: var(--tormenta-red);
+}
+.habilidades-adicionadas-content {
+  height: 22rem;
+  overflow: auto;
+}
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+.footer button {
+  margin-left: 1rem;
+}
+</style>
