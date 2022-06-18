@@ -54,4 +54,14 @@ html, body {
   width: 6rem;
   height: 2.5rem;
 }
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  margin-right: 1rem;
+}
+
+.flex {
+  display: flex;
+}
 </style>

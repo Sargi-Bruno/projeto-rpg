@@ -535,11 +535,6 @@ const handleRegister = () => {
   display: flex;
   margin-bottom: 1rem;
 }
-.input-container {
-  display: flex;
-  flex-direction: column;
-  margin-right: 1rem;
-}
 .input-field {
   width: 10rem;
   height: 2.5rem;

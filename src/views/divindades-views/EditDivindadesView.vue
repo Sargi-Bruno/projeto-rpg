@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue'
-import { RouterLink, useRoute, useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { _getDoc, _updateDoc, _deleteDoc } from '../../firebase/firestore'
 
 const route = useRoute()
@@ -33,31 +33,20 @@ const handleDelete = () => {
 </script>
 
 <template>
-  <div>
-    <h1>Editar Divindade</h1>
-    <div v-if="divindade">
-      <div>
+  <div 
+    v-if="divindade"
+    class="content"
+  >
+    <h1>Criar Divindade</h1>
+    <div class="flex padding">
+      <div class="input-container">
         <label for="nome">Nome</label>
         <p-input-text 
           id="nome"
           v-model="divindade.nome"
         />
-        <label>Descrição</label>
-        <p-editor v-model="divindade.descricao" />
       </div>
-      <div>
-        <label>Crenças e Objetivos</label>
-        <p-editor v-model="divindade.crencasObjetivos" />
-      </div>
-      <div>
-        <label>Devotos</label>
-        <p-editor v-model="divindade.devotos" />
-      </div>
-      <div>
-        <label>Símbolo Sagrado</label>
-        <p-editor v-model="divindade.crencasObjetivos" />
-      </div>
-      <div>
+      <div class="input-container">
         <label for="canalizar-energia">Canalizar Energia</label>
         <p-dropdown
           id="canalizar-energia"
@@ -65,31 +54,102 @@ const handleDelete = () => {
           :options="canalizarEnergiaOptions"
         />
       </div>
-      <div>
+    </div>
+    <div class="flex padding">
+      <div class="first-column">
+        <label>Descrição</label>
+        <p-editor 
+          v-model="divindade.descricao" 
+          editor-style="height: 10rem" 
+        />
+      </div>
+      <div class="second-column">
+        <label>Crenças e Objetivos</label>
+        <p-editor 
+          v-model="divindade.crencasObjetivos" 
+          editor-style="height: 10rem" 
+        />
+      </div>
+    </div>
+    <div class="flex padding">
+      <div class="first-column">
+        <label>Devotos</label>
+        <p-editor 
+          v-model="divindade.devotos" 
+          editor-style="height: 10rem" 
+        />
+      </div>
+      <div class="second-column">
+        <label>Símbolo Sagrado</label>
+        <p-editor 
+          v-model="divindade.simboloSagrado" 
+          editor-style="height: 10rem" 
+        />
+      </div>
+    </div>
+    <div class="flex padding">
+      <div class="first-column">
         <label>Arma Preferida</label>
-        <p-editor v-model="divindade.armaPreferida" />
+        <p-editor 
+          v-model="divindade.armaPreferida" 
+          editor-style="height: 10rem" 
+        />
       </div>
-      <div>
+      <div class="second-column">
         <label>Obrigações e Restrições</label>
-        <p-editor v-model="divindade.obrigacoesRestricoes" />
+        <p-editor 
+          v-model="divindade.obrigacoesRestricoes" 
+          editor-style="height: 10rem" 
+        />
       </div>
-      <div>
-        <label>Poderes Concedidos</label>
-        <p-editor v-model="divindade.poderesConcedidos" />
-      </div>
-      <RouterLink :to="{ name: 'listar-divindades' }">
-        Cancelar
-      </RouterLink>
-      <p-button
-        label="Editar"
-        :disabled="editLoading"
-        @click="handleEdit"
+    </div>
+    <div>
+      <label>Poderes Concedidos</label>
+      <p-editor 
+        v-model="divindade.poderesConcedidos" 
+        editor-style="height: 10rem"
       />
+    </div>
+    <div class="footer">
       <p-button
         label="Deletar"
+        class="p-button-text p-button-danger"
         :disabled="deleteLoading"
         @click="handleDelete"
+      />
+      <p-button
+        label="Cancelar"
+        class="p-button-outlined"
+        @click="router.push({ name: 'listar-divindades' })"
+      />
+      <p-button
+        label="Editar"
+        class="p-button-success"
+        :disabled="editLoading"
+        @click="handleEdit"
       />
     </div>
   </div>
 </template>
+
+<style scoped>
+.first-column {
+  width: 50%;
+  padding-right: 2rem;
+}
+.second-column {
+  width: 50%;
+}
+.padding {
+  padding-bottom: .5rem;
+}
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+.footer button {
+  margin-left: 1rem;
+}
+</style>
