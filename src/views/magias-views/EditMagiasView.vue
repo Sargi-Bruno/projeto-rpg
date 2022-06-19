@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue'
-import { RouterLink, useRoute, useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { _getDoc, _updateDoc, _deleteDoc } from '../../firebase/firestore'
 
 const route = useRoute()
@@ -63,24 +63,29 @@ const handleDelete = () => {
 </script>
 
 <template>
-  <div>
+  <div
+    v-if="magia"
+    class="content"
+  >
     <h1>Editar Magia</h1>
-    <div v-if="magia">
-      <div>
+    <div class="row">
+      <div class="input-container">
         <label for="nome">Nome</label>
         <p-input-text 
           id="nome"
           v-model="magia.nome"
           autocomplete="off"
         />
-        <label>Descrição</label>
-        <p-editor v-model="magia.descricao" />
+      </div>
+      <div class="input-container">
         <label for="classificacao">Classificação</label>
         <p-dropdown 
           id="classificacao"
           v-model="magia.classificacao"
           :options="classificacaoOptions"
         />
+      </div>
+      <div class="input-container">
         <label for="circulo">Círculo</label>
         <p-dropdown 
           id="circulo"
@@ -89,6 +94,8 @@ const handleDelete = () => {
           option-label="label"
           option-value="value"
         />
+      </div>
+      <div class="input-container">
         <label for="escola">Escola</label>
         <p-dropdown 
           id="escola"
@@ -98,52 +105,99 @@ const handleDelete = () => {
           option-value="label"
           :filter="true"
         />
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-container">
         <label for="execucao">Execução</label>
         <p-dropdown 
           id="execucao"
           v-model="magia.execucao"
           :options="execucaoOptions"
         />
+      </div>
+      <div class="input-container">
         <label for="alcance">Alcance</label>
         <p-dropdown 
           id="alcance"
           v-model="magia.alcance"
           :options="alanceOptions"
         />
+      </div>
+      <div class="input-container">
         <label for="alvo">Alvo</label>
         <p-input-text 
           id="alvo"
           v-model="magia.alvo"
         />
+      </div>
+      <div class="input-container">
         <label for="area">Área</label>
         <p-input-text 
           id="area"
           v-model="magia.area"
         />
+      </div>
+      <div class="input-container">
         <label for="duracao">Duração</label>
         <p-input-text 
           id="duracao"
           v-model="magia.duracao"
         />
+      </div>
+      <div class="input-container">
         <label for="resistencia">Resistência</label>
         <p-input-text 
           id="resistencia"
           v-model="magia.resistencia"
         />
       </div>
-      <RouterLink :to="{ name: 'listar-magias' }">
-        Cancelar
-      </RouterLink>
-      <p-button
-        label="Editar"
-        :disabled="editLoading"
-        @click="handleEdit"
-      />
+    </div>
+    <label>Descrição</label>
+    <p-editor 
+      v-model="magia.descricao" 
+      editor-style="height: 10rem"
+    />
+    <div class="footer">
       <p-button
         label="Deletar"
+        class="p-button-text p-button-danger"
         :disabled="deleteLoading"
         @click="handleDelete"
+      />
+      <p-button
+        label="Cancelar"
+        class="p-button-outlined"
+        @click="router.push({ name: 'listar-magias' })"
+      />
+      <p-button
+        label="Editar"
+        class="p-button-success"
+        :disabled="editLoading"
+        @click="handleEdit"
       />
     </div>
   </div>
 </template>
+
+<style scoped>
+.row {
+  display: flex;
+  margin-bottom: .5rem;
+}
+.finish-button {
+  display: block;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  margin-left: auto;
+}
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+.footer button {
+  margin-left: 1rem;
+}
+</style>

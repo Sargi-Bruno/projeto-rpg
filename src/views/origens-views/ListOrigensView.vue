@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { _getDocs } from '../../firebase/firestore'
-import { renderDescricao, renderDescricaoCompleta } from '@/utils/viewFunctions.js'
+import { renderDescricao } from '@/utils/viewFunctions.js'
 
 const router = useRouter()
 const origens = ref([])
@@ -56,27 +56,32 @@ onMounted(async () => {
           </div>
         </div>
       </div>
-      <div v-if="showMore.includes(origem.id)">
-        <p>
-          {{ renderDescricaoCompleta(origem.descricao) }} 
-          <span 
-            class="show-more"
-            @click="handleShowLess(origem.id)"
-          >
-            Ver menos
-          </span>
-        </p>
+      <div v-if="origem.descricao.length > 136">
+        <div v-if="showMore.includes(origem.id)">
+          <div>
+            <div v-html="origem.descricao" />
+            <span 
+              class="show-more"
+              @click="handleShowLess(origem.id)"
+            >
+              Ver menos
+            </span>
+          </div>
+        </div>
+        <div v-else>
+          <p>
+            {{ renderDescricao(origem.descricao) }} 
+            <span
+              class="show-more"
+              @click="showMore.push(origem.id)"
+            >
+              Ver mais
+            </span>
+          </p>
+        </div>
       </div>
       <div v-else>
-        <p>
-          {{ renderDescricao(origem.descricao) }} 
-          <span 
-            class="show-more"
-            @click="showMore.push(origem.id)"
-          >
-            Ver mais
-          </span>
-        </p>
+        <div v-html="origem.descricao" />
       </div>
       <div class="card-footer">
         <p-button 
@@ -150,6 +155,7 @@ onMounted(async () => {
   display: flex;
   justify-content: flex-end;
   border-top: 1px solid var(--tormenta-dark-red);
+  margin-top: 1rem;
 }
 .card-footer button {
   margin-top: 1rem;

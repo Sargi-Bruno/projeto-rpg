@@ -63,75 +63,116 @@ const handleRegister = () => {
 </script>
 
 <template>
-  <h1>Criar Magia</h1>
-  <div>
-    <label for="nome">Nome</label>
-    <p-input-text 
-      id="nome"
-      v-model="magia.nome"
-      autocomplete="off"
-    />
+  <div class="content">
+    <h1>Criar Magia</h1>
+    <div class="row">
+      <div class="input-container">
+        <label for="nome">Nome</label>
+        <p-input-text 
+          id="nome"
+          v-model="magia.nome"
+          autocomplete="off"
+        />
+      </div>
+      <div class="input-container">
+        <label for="classificacao">Classificação</label>
+        <p-dropdown 
+          id="classificacao"
+          v-model="magia.classificacao"
+          :options="classificacaoOptions"
+        />
+      </div>
+      <div class="input-container">
+        <label for="circulo">Círculo</label>
+        <p-dropdown 
+          id="circulo"
+          v-model="magia.circulo"
+          :options="circuloOptions"
+          option-label="label"
+          option-value="value"
+        />
+      </div>
+      <div class="input-container">
+        <label for="escola">Escola</label>
+        <p-dropdown 
+          id="escola"
+          v-model="magia.escola"
+          :options="escolaOptions"
+          option-label="label"
+          option-value="label"
+          :filter="true"
+        />
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-container">
+        <label for="execucao">Execução</label>
+        <p-dropdown 
+          id="execucao"
+          v-model="magia.execucao"
+          :options="execucaoOptions"
+        />
+      </div>
+      <div class="input-container">
+        <label for="alcance">Alcance</label>
+        <p-dropdown 
+          id="alcance"
+          v-model="magia.alcance"
+          :options="alanceOptions"
+        />
+      </div>
+      <div class="input-container">
+        <label for="alvo">Alvo</label>
+        <p-input-text 
+          id="alvo"
+          v-model="magia.alvo"
+        />
+      </div>
+      <div class="input-container">
+        <label for="area">Área</label>
+        <p-input-text 
+          id="area"
+          v-model="magia.area"
+        />
+      </div>
+      <div class="input-container">
+        <label for="duracao">Duração</label>
+        <p-input-text 
+          id="duracao"
+          v-model="magia.duracao"
+        />
+      </div>
+      <div class="input-container">
+        <label for="resistencia">Resistência</label>
+        <p-input-text 
+          id="resistencia"
+          v-model="magia.resistencia"
+        />
+      </div>
+    </div>
     <label>Descrição</label>
-    <p-editor v-model="magia.descricao" />
-    <label for="classificacao">Classificação</label>
-    <p-dropdown 
-      id="classificacao"
-      v-model="magia.classificacao"
-      :options="classificacaoOptions"
+    <p-editor 
+      v-model="magia.descricao" 
+      editor-style="height: 10rem"
     />
-    <label for="circulo">Círculo</label>
-    <p-dropdown 
-      id="circulo"
-      v-model="magia.circulo"
-      :options="circuloOptions"
-      option-label="label"
-      option-value="value"
-    />
-    <label for="escola">Escola</label>
-    <p-dropdown 
-      id="escola"
-      v-model="magia.escola"
-      :options="escolaOptions"
-      option-label="label"
-      option-value="label"
-      :filter="true"
-    />
-    <label for="execucao">Execução</label>
-    <p-dropdown 
-      id="execucao"
-      v-model="magia.execucao"
-      :options="execucaoOptions"
-    />
-    <label for="alcance">Alcance</label>
-    <p-dropdown 
-      id="alcance"
-      v-model="magia.alcance"
-      :options="alanceOptions"
-    />
-    <label for="alvo">Alvo</label>
-    <p-input-text 
-      id="alvo"
-      v-model="magia.alvo"
-    />
-    <label for="area">Área</label>
-    <p-input-text 
-      id="area"
-      v-model="magia.area"
-    />
-    <label for="duracao">Duração</label>
-    <p-input-text 
-      id="duracao"
-      v-model="magia.duracao"
-    />
-    <label for="resistencia">Resistência</label>
-    <p-input-text 
-      id="resistencia"
-      v-model="magia.resistencia"
+    <p-button
+      label="Finalizar"
+      class="finish-button"
+      :disabled="registerLoading"
+      @click="handleRegister"
     />
   </div>
-  <p-button
-    label="Finalizar"
-    :disabled="registerLoading"
-    @click="handleRegister"
-  />
 </template>
+
+<style scoped>
+.row {
+  display: flex;
+  margin-bottom: .5rem;
+}
+.finish-button {
+  display: block;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  margin-left: auto;
+}
+</style>

@@ -10,15 +10,18 @@ export const atributosDicionario = {
 export const renderDescricao = (descricao) => {
   descricao = descricao.replace('<p>', '')
   descricao = descricao.replace('</p>', '')
-  descricao = descricao.substr(0, 130)
-  descricao = descricao.substr(0, Math.min(descricao.length, descricao.lastIndexOf(" ")))
 
-  if(descricao[descricao.length - 1] === ',') {
-    descricao = descricao.slice(0, -1)
+  if(descricao.length > 130) {
+    descricao = descricao.substr(0, 130)
+    descricao = descricao.substr(0, Math.min(descricao.length, descricao.lastIndexOf(" ")))
+
+    if(descricao[descricao.length - 1] === ',') {
+      descricao = descricao.slice(0, -1)
+    }
+  
+    descricao += '...'
   }
 
-  descricao += '...'
-  
   return descricao
 }
 
@@ -85,6 +88,22 @@ export const renderHabilidades = (habilidades) => {
       stringReturn += `${habilidade.nome}.`
     } else {
       stringReturn += `${habilidade.nome}, `
+    }
+  })
+
+  return stringReturn
+}
+
+export const renderArray = (array) => {
+  let stringReturn = ''
+
+  array.sort((a, b) => a.localeCompare(b))
+
+  array.forEach((item, index) => {
+    if(index === array.length -1) {
+      stringReturn += `${item}`
+    } else {
+      stringReturn += `${item}, `
     }
   })
 
