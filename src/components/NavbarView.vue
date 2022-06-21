@@ -48,7 +48,7 @@ const handleSignOut = () => {
       <RouterLink :to="{ name: 'home' }">
         Início
       </RouterLink>
-      <RouterLink :to="{ name: 'listar-divindades' }">
+      <RouterLink :to="{ name: 'listar-personagens' }">
         Personagens
       </RouterLink>
       <RouterLink :to="{ name: 'listar-racas' }">

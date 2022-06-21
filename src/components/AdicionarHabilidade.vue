@@ -9,7 +9,11 @@ defineProps({
   poder: {
     type: Boolean,
     default: false,
-  }
+  },
+  noTitle: {
+    type: Boolean,
+    default: false
+  },
 })
 
 const emit = defineEmits(['adicionar-habilidade'])
@@ -33,18 +37,30 @@ const adicionarHabilidade = () => {
 
 <template>
   <div>
-    <h2 v-if="poder">
-      Adicionar Poder
-    </h2>
-    <h2 v-else>
-      Adicionar Habilidade
-    </h2>
+    <div v-if="!noTitle">
+      <h2 v-if="poder">
+        Adicionar Poder
+      </h2>
+      <h2 v-else>
+        Adicionar Habilidade
+      </h2>
+    </div>
     <div class="header">
       <div class="input-container">
         <label for="nome-habilidade">Nome</label>
         <p-input-text 
           id="nome-habilidade"
           v-model="habilidade.nome"
+        />
+      </div>
+      <div 
+        v-if="classe"
+        class="input-nivel"
+      >
+        <label for="nivel-concedido">Nível concedido</label>
+        <p-input-number 
+          id="nivel-concedido"
+          v-model="habilidade.nivelConcedido"
         />
       </div>
       <div class="switch-container">
@@ -63,13 +79,6 @@ const adicionarHabilidade = () => {
         <p-input-switch 
           id="magica-switch"
           v-model="habilidade.habilidadeMagica"
-        />
-      </div>
-      <div v-if="classe">
-        <label for="nivel-concedido">Nível concedido</label>
-        <p-input-text 
-          id="nivel-concedido"
-          v-model="habilidade.nivelConcedido"
         />
       </div>
     </div>   
@@ -111,5 +120,8 @@ const adicionarHabilidade = () => {
   display: block;
   margin-top: 1rem;
   margin-left: auto;
+}
+.input-nivel {
+  width: 8rem;
 }
 </style>

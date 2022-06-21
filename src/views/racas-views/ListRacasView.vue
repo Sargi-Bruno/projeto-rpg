@@ -86,10 +86,10 @@ onMounted(async () => {
         </div>
         <!-- Footer -->
         <div class="card-footer">
-          <p-button
+          <!-- <p-button
             label="Habilidades"
             @click="handleHabilidadesModal(raca.habilidades)"
-          />
+          /> -->
           <p-button
             label="Ver mais"
             @click="router.push({ name: 'detalhes-raca', params: { id: raca.id } })"
@@ -168,8 +168,10 @@ onMounted(async () => {
 .card-footer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--tormenta-dark-red);
 }
 :deep(.modal-container) {
   display: flex;

@@ -29,13 +29,14 @@ import NavbarViewVue from './components/NavbarView.vue';
   --tormenta-red: #d13133;
   --tormenta-dark-red: #b52d34;
   --tormenta-background: #f4f3f2;
+  --background-color: #F5F5F5;
 }
 
 html, body {
   margin: 0;
   padding: 0;
   font-family: 'Roboto', sans-serif;
-  background-color: #F5F5F5;
+  background-color: var(--background-color);
   line-height: 1.6;
 }
 
@@ -55,10 +56,28 @@ html, body {
   height: 2.5rem;
 }
 
+.p-tabview-panels {
+  background-color: var(--background-color) !important;
+}
+
+.p-tabview-panel {
+  background-color: var(--background-color);
+}
+
 .input-container {
   display: flex;
   flex-direction: column;
   margin-right: 1rem;
+}
+
+.input-switch-container {
+  display: flex;
+  align-items: center;
+  margin-right: 1rem;
+}
+
+.input-switch-container label {
+  margin-right: .5rem;
 }
 
 .flex {
