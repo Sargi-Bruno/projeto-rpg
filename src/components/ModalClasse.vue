@@ -1,8 +1,16 @@
 <script setup>
-import { onMounted, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { _getDoc } from '../../firebase/firestore'
 import { renderArray } from '@/utils/viewFunctions'
+
+defineProps({
+  classe: {
+    type: Object,
+    default() {
+      return {}
+    }
+  }
+})
+
+const emit = defineEmits(['handleClose'])
 
 const tipoMagiaDicionario = {
   Arcana: 'arcanas',
@@ -15,30 +23,23 @@ const intervaloAprendizadoOptions = [
   {label: 'cada nível ímpar', value: 2},
 ]
 
-const router = useRouter()
-const route = useRoute()
-const classe = ref()
-
-onMounted(async () => {
-  classe.value = await _getDoc('classes', route.params.id)
-})
+const handleCloseModal = () => {
+  emit('handleClose')
+}
 </script>
 
 <template>
-  <div
-    v-if="classe"
-    class="content"
-  >
-    <div class="header">
-      <h1>{{ classe.nome }}</h1>
-      <p-button
-        label="Editar"
-        @click="router.push({ name: 'editar-classe', params: { id: classe.id } })"
-      />
-    </div>
-    <!-- Descrição -->
-    <div class="content-wrapper">
-      <div v-html="classe.descricao" />
+  <div class="modal">
+    <div class="modal-header">
+      <h4 class="modal-header-title">
+        {{ classe.nome }}
+      </h4>
+      <button 
+        class="modal-header-button"
+        @click="handleCloseModal"
+      >
+        <i class="pi pi-times" />
+      </button>
     </div>
     <!-- Características de Classe -->
     <div class="content-wrapper">
@@ -202,14 +203,31 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.modal {
+  width: 60rem;
+  height: 36rem;
+  padding: 1rem;
+  box-shadow: 0 5px 10px rgb(0 0 0 / 12%);
+  border-radius: 4px;
+  background-color: var(--tormenta-background);
+  overflow: auto;
 }
-.header h1 {
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.modal-header-title {
+  margin: 0;
   font-family: 'Tormenta', sans-serif;
+  font-size: 24px;
   color: var(--tormenta-red);
+}
+.modal-header-button {
+  border: none;
+  background: none;
+  cursor: pointer;
 }
 .content-wrapper {
   margin-bottom: 3rem;

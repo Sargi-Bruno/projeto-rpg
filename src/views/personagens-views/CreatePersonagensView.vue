@@ -8,11 +8,7 @@ import ChooseDivindadeViewVue from './create-personagens-views/ChooseDivindadeVi
 import ChooseAtributosViewVue from './create-personagens-views/ChooseAtributosView.vue'
 import ChoosePericiasViewVue from './create-personagens-views/ChoosePericiasView.vue'
 import ChooseEquipamentosViewVue from './create-personagens-views/ChooseEquipamentosView.vue'
-import ChooseMagiasViewVue from './create-personagens-views/ChooseMagiasView.vue'
 import ToquesFinaisVue from './create-personagens-views/ToquesFinaisView.vue'
-
-const route = useRoute()
-const personagemId = route.params.id
 
 const setepperOptions = [
   { label: 'Raça', value: 0 },
@@ -22,8 +18,7 @@ const setepperOptions = [
   { label: 'Atributos', value: 4 },
   { label: 'Perícias', value: 5 },
   { label: 'Equipamentos', value: 6 },
-  { label: 'Magias', value: 7 },
-  { label: 'Toques Finais', value: 8 }
+  { label: 'Toques Finais', value: 7 }
 ]
 const componentOptions = [
   ChooseRacaViewVue, 
@@ -33,9 +28,11 @@ const componentOptions = [
   ChooseAtributosViewVue, 
   ChoosePericiasViewVue,
   ChooseEquipamentosViewVue,
-  ChooseMagiasViewVue,
   ToquesFinaisVue
   ]
+
+const route = useRoute()
+const personagemId = route.params.id
 const currentStep = ref(0)
 
 const handleNextStep = (nextStep) => {
@@ -43,20 +40,31 @@ const handleNextStep = (nextStep) => {
 }
 </script>
 
-
 <template>
-  <div>
-    <h1>Criar personagem</h1>
-    <p-select-button
-      v-model="currentStep"
-      :options="setepperOptions"
-      option-label="label"
-      option-value="value"
-    />
-    <component 
-      :is="componentOptions[currentStep]" 
-      :personagem-id="personagemId"
-      @handle-next-step="handleNextStep"
-    />
+  <div class="content">
+    <div class="navigation">
+      <p-select-button
+        v-model="currentStep"
+        :options="setepperOptions"
+        option-label="label"
+        option-value="value"
+      />
+    </div>
+    <KeepAlive>
+      <component 
+        :is="componentOptions[currentStep]" 
+        :personagem-id="personagemId"
+        @handle-next-step="handleNextStep"
+      />
+    </KeepAlive>
   </div>
 </template>
+
+<style scoped>
+.navigation {
+  display: flex;
+  justify-content: center;
+  margin-top: 4rem;
+  margin-bottom: 4rem;
+}
+</style>
