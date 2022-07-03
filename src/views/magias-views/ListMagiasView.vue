@@ -16,7 +16,6 @@ const handleShowLess = (id) => {
 
 onMounted(async () => {
   magias.value = await _getDocs('magias')
-  console.log(magias.value)
 })
 </script>
 

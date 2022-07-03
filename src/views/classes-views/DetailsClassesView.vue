@@ -170,7 +170,6 @@ onMounted(async () => {
       <div 
         v-for="(habilidade, index) in classe.habilidades"
         :key="index"
-        class="card"
       >
         <h4 class="card-title">
           {{ habilidade.nome }}

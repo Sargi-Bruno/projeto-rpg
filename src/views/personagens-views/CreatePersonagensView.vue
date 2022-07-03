@@ -6,7 +6,6 @@ import ChooseClasseViewVue from './create-personagens-views/ChooseClasseView.vue
 import ChooseOrigemViewVue from './create-personagens-views/ChooseOrigemView.vue'
 import ChooseDivindadeViewVue from './create-personagens-views/ChooseDivindadeView.vue'
 import ChooseAtributosViewVue from './create-personagens-views/ChooseAtributosView.vue'
-import ChoosePericiasViewVue from './create-personagens-views/ChoosePericiasView.vue'
 import ChooseEquipamentosViewVue from './create-personagens-views/ChooseEquipamentosView.vue'
 import ToquesFinaisVue from './create-personagens-views/ToquesFinaisView.vue'
 
@@ -16,17 +15,15 @@ const setepperOptions = [
   { label: 'Origem', value: 2 },
   { label: 'Divindade', value: 3 },
   { label: 'Atributos', value: 4 },
-  { label: 'Perícias', value: 5 },
-  { label: 'Equipamentos', value: 6 },
-  { label: 'Toques Finais', value: 7 }
+  { label: 'Equipamentos', value: 5 },
+  { label: 'Toques Finais', value: 6 }
 ]
 const componentOptions = [
   ChooseRacaViewVue, 
   ChooseClasseViewVue, 
   ChooseOrigemViewVue, 
   ChooseDivindadeViewVue, 
-  ChooseAtributosViewVue, 
-  ChoosePericiasViewVue,
+  ChooseAtributosViewVue,
   ChooseEquipamentosViewVue,
   ToquesFinaisVue
   ]

@@ -8,6 +8,7 @@ import {
   renderHabilidades
 } from '@/utils/viewFunctions'
 import ModalHabilidadesVue from '../../../components/ModalHabilidades.vue'
+import { computed } from '@vue/reactivity';
 
 const props = defineProps({
   personagemId: {
@@ -18,7 +19,7 @@ const props = defineProps({
 
 const emit = defineEmits(['handle-next-step'])
 
-const atributosOptions = [
+let atributosOptions = [
   {label: 'Força', value: 'forca'},
   {label: 'Destreza', value: 'destreza'},
   {label: 'Constituição', value: 'constituicao'},
@@ -37,6 +38,16 @@ const habilidadesModal = ref([])
 onMounted(async () => {
   racas.value = await _getDocs('racas')
   personagem.value = await _getDoc('personagens', props.personagemId)
+})
+
+const computedAtributosOptions = computed(() => {
+  if(personagem.value.raca.excecaoAtributo) {
+    atributosOptions = atributosOptions.filter((x) => {
+      return x.label !== personagem.value.raca.excecaoAtributo
+    })
+  }
+
+  return atributosOptions
 })
 
 const handleHabilidadesModal = (habilidades) => {
@@ -75,10 +86,10 @@ const handleRacaVariante = () => {
   } else {
     isRacaFinished.value = false
   }
-  console.log(personagem.value.raca.varianteEscolhida)
 }
 
 const handleChangeRaca = () => {
+  isRacaFinished.value = false
   isRacaChosen.value = false
   personagem.value.raca = {}
 }
@@ -156,11 +167,17 @@ const handleSavePersonagem = async () => {
       </div>
     </div>
     <div v-else>
-      <p-button
-        label="Mudar raça"
-        class="change-raca-button"
-        @click="handleChangeRaca"
-      />
+      <div class="buttons-container">
+        <p-button
+          label="Mudar raça"
+          @click="handleChangeRaca"
+        />
+        <p-button
+          label="Continuar"
+          :disabled="!isRacaFinished"
+          @click="handleSavePersonagem"
+        />
+      </div>
       <div>
         <!-- Nome -->
         <h3 class="card-title">
@@ -201,7 +218,7 @@ const handleSavePersonagem = async () => {
         <h2>Escolha os atributos da Raça</h2>
         <p-select-button
           v-model="personagem.raca.atributosDinamicoEscolhidos"
-          :options="atributosOptions"
+          :options="computedAtributosOptions"
           option-label="label"
           option-value="value"
           multiple
@@ -216,12 +233,6 @@ const handleSavePersonagem = async () => {
           @click="handleRacaVariante"
         />
       </div>
-      <p-button
-        label="Continuar"
-        class="continue-button"
-        :disabled="!isRacaFinished"
-        @click="handleSavePersonagem"
-      />
     </div>
     <!-- Habilidades Modal -->
     <div>
@@ -302,14 +313,9 @@ const handleSavePersonagem = async () => {
   justify-content: center;
   align-items: center;
 }
-.change-raca-button {
-  display: block;
-  margin-left: auto;
+.buttons-container {
+  display: flex;
+  justify-content: space-between;
   margin-bottom: 2rem;
-}
-.continue-button {
-  display: block;
-  margin-left: auto;
-  margin-top: 2rem;
 }
 </style>

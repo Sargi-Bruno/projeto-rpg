@@ -10,6 +10,8 @@ import {
     updateDoc,
     deleteDoc,
     serverTimestamp,
+    query,
+    where,
 } from 'firebase/firestore'
 
 // const firebaseConfig = {
@@ -83,4 +85,32 @@ export const createPersonagem = async (data, uid) => {
     const doc = await addDoc(collection(firestore, 'personagens'), data)
 
     return doc.id
+}
+
+export const getMagiasForCharCreation = async (classificacao) => {
+    let docs = []
+    const magiasRef = collection(firestore, 'magias')
+
+    const magiasCirculoRef = query(magiasRef, where('circulo', '==', 1))
+    const magiasClassificacaoRef = query(magiasCirculoRef, where('classificacao', '==', classificacao))
+    const magiasUniversalRef = query(magiasCirculoRef, where('classificacao', '==', 'Universal'))
+    
+    const querySnapshotClassificacao = await getDocs(magiasClassificacaoRef)
+    const querySnapshotUniversal = await getDocs(magiasUniversalRef)
+
+    querySnapshotClassificacao.docs.forEach((doc) => {
+        docs.push({
+            ...doc.data(),
+            id: doc.id
+        })
+    })
+
+    querySnapshotUniversal.docs.forEach((doc) => {
+        docs.push({
+            ...doc.data(),
+            id: doc.id
+        })
+    })
+
+    return docs
 }

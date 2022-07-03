@@ -109,3 +109,46 @@ export const renderArray = (array) => {
 
   return stringReturn
 }
+
+export const getModifier = (abilityScore) => {
+  const modifier = Math.floor((abilityScore - 10) / 2)
+
+  if(Math.sign(modifier) === 1) return '+' + modifier
+
+  if(isNaN(Math.sign(modifier))) return '-'
+
+  return modifier
+}
+
+export const getRacaAtributos = (raca) => {
+  if(raca.tipoAtributos === 'fixo') {
+    return raca.atributos
+  }
+
+  if(raca.tipoAtributos === 'dinamico') {
+    const atributos = {
+      forca: 0,
+      destreza: 0,
+      constituicao: 0,
+      inteligencia: 0,
+      sabedoria: 0,
+      carisma: 0
+    }
+
+    raca.atributosDinamicoEscolhidos.forEach(atributo => {
+      atributos[atributo] = 2
+    })
+
+    if(raca.excecaoAtributo) {
+      atributos[raca.excecaoAtributo.toLowerCase()] = -2
+    }
+
+    return atributos
+  }
+
+  if(raca.tipoAtributos === 'variante') {
+    const index = raca.variantes.findIndex((value) => value === raca.varianteEscolhida)
+
+    return raca.atributos[index]
+  }
+}
