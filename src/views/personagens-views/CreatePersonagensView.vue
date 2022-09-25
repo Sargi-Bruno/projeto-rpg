@@ -9,7 +9,7 @@ import ChooseAtributosViewVue from './create-personagens-views/ChooseAtributosVi
 import ChooseEquipamentosViewVue from './create-personagens-views/ChooseEquipamentosView.vue'
 import ToquesFinaisVue from './create-personagens-views/ToquesFinaisView.vue'
 
-const setepperOptions = [
+const stepperOptions = [
   { label: 'Raça', value: 0 },
   { label: 'Classe', value: 1 },
   { label: 'Origem', value: 2 },
@@ -42,7 +42,7 @@ const handleNextStep = (nextStep) => {
     <div class="navigation">
       <p-select-button
         v-model="currentStep"
-        :options="setepperOptions"
+        :options="stepperOptions"
         option-label="label"
         option-value="value"
       />

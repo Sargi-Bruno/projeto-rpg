@@ -30,13 +30,13 @@ const dadosAtributosSelecionados = ref({
   carisma: 0,
 })
 const atributosOptions = ref([
-  { label: 'Não selecionado', value: '0', disabled: false },
-  { label: 'Força', value: 'forca', disabled: false },
-  { label: 'Destreza', value: 'destreza', disabled: false },
-  { label: 'Constituição', value: 'constituicao', disabled: false },
-  { label: 'Inteligência', value: 'inteligencia', disabled: false },
-  { label: 'Sabedoria', value: 'sabedoria', disabled: false },
-  { label: 'Carisma', value: 'carisma', disabled: false }
+  { label: 'Não selecionado', value: '0', disabled: false, order: '0' },
+  { label: 'Força', value: 'forca', disabled: false, order: '1' },
+  { label: 'Destreza', value: 'destreza', disabled: false, order: '2' },
+  { label: 'Constituição', value: 'constituicao', disabled: false, order: '3' },
+  { label: 'Inteligência', value: 'inteligencia', disabled: false, order: '4' },
+  { label: 'Sabedoria', value: 'sabedoria', disabled: false, order: '5' },
+  { label: 'Carisma', value: 'carisma', disabled: false, order: '6' }
 ])
 const mounted = ref(false)
 const personagem = ref()
@@ -62,6 +62,21 @@ const atributosLivre = ref({
 const pontos = ref(20)
 const atributosDropdownDisabled = ref(true)
 const isAtributosChosen = ref(false)
+
+const ordedAtributosOptions = computed(() => {
+  let enabledArray = []
+  let disabledArray = []
+
+  atributosOptions.value.forEach(atributo => {
+    if(atributo.disabled) disabledArray.push(atributo)
+    else enabledArray.push(atributo)
+  })
+
+  enabledArray = enabledArray.sort()
+  disabledArray = disabledArray.sort()
+
+  return enabledArray.concat(disabledArray)
+})
 
 const isAtributosDadosFinished = computed(() => {
   if(
@@ -365,7 +380,7 @@ const handleSaveAtributos = async () => {
         id="atributo1"
         v-model="atributosSelecionados[0]"
         class="atributo-dropdown"
-        :options="atributosOptions"
+        :options="ordedAtributosOptions"
         option-label="label"
         option-value="value"
         option-disabled="disabled"
@@ -379,7 +394,7 @@ const handleSaveAtributos = async () => {
         id="atributo2"
         v-model="atributosSelecionados[1]"
         class="atributo-dropdown"
-        :options="atributosOptions"
+        :options="ordedAtributosOptions"
         option-label="label"
         option-value="value"
         option-disabled="disabled"
@@ -393,7 +408,7 @@ const handleSaveAtributos = async () => {
         id="atributo3"
         v-model="atributosSelecionados[2]"
         class="atributo-dropdown"
-        :options="atributosOptions"
+        :options="ordedAtributosOptions"
         option-label="label"
         option-value="value"
         option-disabled="disabled"
@@ -407,7 +422,7 @@ const handleSaveAtributos = async () => {
         id="atributo4"
         v-model="atributosSelecionados[3]"
         class="atributo-dropdown"
-        :options="atributosOptions"
+        :options="ordedAtributosOptions"
         option-label="label"
         option-value="value"
         option-disabled="disabled"
@@ -421,7 +436,7 @@ const handleSaveAtributos = async () => {
         id="atributo5"
         v-model="atributosSelecionados[4]"
         class="atributo-dropdown"
-        :options="atributosOptions"
+        :options="ordedAtributosOptions"
         option-label="label"
         option-value="value"
         option-disabled="disabled"
@@ -435,7 +450,7 @@ const handleSaveAtributos = async () => {
         id="atributo6"
         v-model="atributosSelecionados[5]"
         class="atributo-dropdown"
-        :options="atributosOptions"
+        :options="ordedAtributosOptions"
         option-label="label"
         option-value="value"
         option-disabled="disabled"

@@ -7,15 +7,18 @@ import PrimeVue from 'primevue/config'
 import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
 import InputNumber from 'primevue/inputnumber'
+import Textarea from 'primevue/textarea'
 import Dropdown from 'primevue/dropdown'
 import MultiSelect from 'primevue/multiselect'
 import InputSwitch from 'primevue/inputswitch'
 import Checkbox from 'primevue/checkbox'
 import TabView from 'primevue/tabview'
 import TabPanel from 'primevue/tabpanel'
-import ScrollTop from 'primevue/scrolltop';
-import SelectButton from 'primevue/selectbutton';
-import ProgressSpinner from 'primevue/progressspinner';
+import Accordion from 'primevue/accordion'
+import AccordionTab from 'primevue/accordiontab'
+import ScrollTop from 'primevue/scrolltop'
+import SelectButton from 'primevue/selectbutton'
+import ProgressSpinner from 'primevue/progressspinner'
 import Editor from 'primevue/editor'
 
 import { vfmPlugin } from 'vue-final-modal'
@@ -44,12 +47,15 @@ app.use(vfmPlugin)
 app.component('PButton', Button)
   .component('PInputText', InputText)
   .component('PInputNumber', InputNumber)
+  .component('PTextarea', Textarea)
   .component('PDropdown', Dropdown)
   .component('PMultiSelect', MultiSelect)
   .component('PInputSwitch', InputSwitch)
   .component('PCheckbox', Checkbox)
   .component('PTabView', TabView)
   .component('PTabPanel', TabPanel)
+  .component('PAccordion', Accordion)
+  .component('PAccordionTab', AccordionTab)
   .component('PScrollTop', ScrollTop)
   .component('PSelectButton', SelectButton)
   .component('PProgressSpinner', ProgressSpinner)

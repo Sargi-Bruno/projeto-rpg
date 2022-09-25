@@ -1,5 +1,3 @@
-// import { initializeApp } from 'firebase/app'
-// import { getAuth } from 'firebase/auth'
 import { 
     getFirestore,
     collection,
@@ -14,21 +12,6 @@ import {
     where,
 } from 'firebase/firestore'
 
-// const firebaseConfig = {
-//     apiKey: "AIzaSyDzhifEXXAAo0hNdghzuTZiOSDtp_MttWU",
-//     authDomain: "projeto-rpg-f1c50.firebaseapp.com",
-//     projectId: "projeto-rpg-f1c50",
-//     storageBucket: "projeto-rpg-f1c50.appspot.com",
-//     messagingSenderId: "851387745048",
-//     appId: "1:851387745048:web:da1ffb95ae0a5871b6546d"
-//   }
-
-// initializeApp(firebaseConfig)
-
-// const auth = getAuth()
-
-// export { auth }
-
 export const firestore = getFirestore()
 
 export const _addDoc = async (collectionName, doc) => {
@@ -36,7 +19,6 @@ export const _addDoc = async (collectionName, doc) => {
     doc.nome = doc.nome.trim()
     doc.searchField = doc.nome.replace(/ /g, '').toLowerCase()
     doc.collectionName = collectionName
-    // doc.timestamp = Date.now()
 
     const data = await addDoc(collection(firestore, collectionName), doc)
 
